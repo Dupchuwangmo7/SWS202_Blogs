@@ -1,6 +1,6 @@
 export const metaData = {
   baseUrl: "https://astrofolio-astro.vercel.app/",
-  title: "Astrofolio",
+  title: "Dupchuuw's Blog",
   name: "Vikas",
   ogImage: "/opengraph-image.png",
   description:
@@ -8,9 +8,7 @@ export const metaData = {
 };
 
 export const socialLinks = {
-  twitter: "https://x.com/vikas5914",
-  github: "https://github.com/vikas5914/Astrofolio",
-  instagram: "https://www.instagram.com/",
-  linkedin: "https://www.linkedin.com/",
-  email: "mailto:example@gmail.com",
+  github: "https://github.com/Dupchuwangmo7/SWS202_Blogs",
+  instagram: "https://www.instagram.com/?next=%2F",
+  email: "02230282.cst@rub.edu.bt",
 };
