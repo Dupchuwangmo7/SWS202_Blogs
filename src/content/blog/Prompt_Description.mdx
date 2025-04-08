@@ -1,0 +1,31 @@
+---
+title: "Prompt Description"
+publishedAt: 2025-04-08
+summary: "A guide to what the Bash prompt is, how to customize it, and why it matters."
+tags: "Linux"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="⌨️">
+  The Bash prompt is more than just a blinking cursor—it's your command center. Customize it to boost productivity and track your system context.
+</Callout>
+
+### **What is the Bash Prompt?**
+
+- The **Bash prompt** is the **text-based indicator** in the terminal that shows the system is ready for input.
+- It usually includes:
+  - **Username** (`<username>`)
+  - **Hostname** (`<hostname>`)
+  - **Current working directory** (`<cwd>`)
+
+### **Default Prompt Format**
+
+```bash
+<username>@<hostname>:<current_directory>$

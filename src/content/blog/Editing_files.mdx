@@ -1,0 +1,113 @@
+---
+title: "Editing Files in Linux"
+publishedAt: 2025-04-08
+summary: "A guide to basic and advanced text editing in Linux, focusing on Nano and Vim."
+tags: "Linux, Text Editing, Nano, Vim"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="📝">
+  Editing files in Linux is essential for managing system configurations and working with text-based data.
+</Callout>
+
+### **Editing Files in Linux – Notes**
+
+---
+
+### **1. Introduction to Editing Files**
+
+- After creating files and directories, the next step is to edit and modify them.
+- Common text editors in Linux:
+    - **Nano** (easy to use, beginner-friendly).
+    - **Vim** (powerful, efficient, but requires practice).
+
+---
+
+### **2. Editing with Nano**
+
+- **Nano** is a simple terminal-based text editor.
+- To open and edit a file:
+    
+    ```bash
+    nano <filename>
+    ```
+    
+    **Example:**
+    
+    ```bash
+    nano notes.txt
+    ```
+    
+- **Basic Nano Commands:**
+    - `CTRL + W` → Search for text.
+    - `CTRL + O` → Save file.
+    - `CTRL + X` → Exit Nano.
+    - `CTRL + K` → Cut text.
+    - `CTRL + U` → Paste text.
+
+- **Viewing File Contents in Shell:**
+    
+    ```bash
+    cat notes.txt
+    ```
+
+---
+
+### **3. Important System Files**
+
+- **`/etc/passwd`** → Contains user details (username, UID, GID, home directory).
+- **`/etc/shadow`** → Stores password hashes (restricted access).
+- Misconfigured permissions on these files can create security risks.
+
+---
+
+### **4. Editing with Vim**
+
+- Vim (Vi IMproved) is a powerful and highly configurable text editor.
+- It follows the **Unix philosophy**: small specialized programs working together.
+- To open Vim:
+    
+    ```bash
+    vim <filename>
+    ```
+    
+- **Vim has different modes:**
+    - **Normal Mode** → Default mode for running commands.
+    - **Insert Mode** → Allows text input (`i` or `a` to enter insert mode).
+    - **Visual Mode** → Used for selecting and manipulating text.
+    - **Command Mode** → Used for executing commands (`:` key).
+    
+- **Basic Vim Commands:**
+    - `:q` → Exit Vim.
+    - `:wq` → Save and exit.
+    - `:q!` → Quit without saving.
+    - `i` → Enter insert mode.
+    - `ESC` → Return to normal mode.
+
+---
+
+### **5. Learning Vim with VimTutor**
+
+- Vim provides an interactive tutorial for beginners.
+- To start the tutorial:
+    
+    ```bash
+    vimtutor
+    ```
+
+- **Estimated time to complete**: 25-30 minutes.
+
+---
+
+### **Conclusion**
+
+- Nano is easier for quick edits, while Vim is more efficient for advanced users.
+- Understanding permissions and system files is crucial for security.
+- Learning Vim can significantly improve text editing speed in Linux.

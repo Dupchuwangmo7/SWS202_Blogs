@@ -1,0 +1,144 @@
+---
+title: "File Descriptors and Redirections in Linux"
+publishedAt: 2025-04-09
+summary: "Understanding how to manage input/output operations and redirection in Linux."
+tags: "Linux, Terminal, File Descriptors, Redirection, I/O"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="🔄">
+  Linux uses file descriptors and redirections to control data flow between commands, files, and devices.
+</Callout>
+
+### Why Understanding File Descriptors Matters?
+
+- Linux offers powerful I/O management through file descriptors
+- Understanding redirection helps create efficient command pipelines
+---
+
+### 1. File Descriptors (FD) in Linux
+
+A **file descriptor** is a reference used by the operating system to manage I/O operations.
+Linux maintains three standard file descriptors:
+
+- **STDIN (0)** - Standard Input: Used for reading input
+- **STDOUT (1)** - Standard Output: Used for displaying output
+- **STDERR (2)** - Standard Error: Used for displaying error messages
+
+These default file descriptors are used in every process and can be redirected.
+---
+
+### 2. Examples of File Descriptors in Action
+
+**STDIN and STDOUT Example (using cat)**
+
+```bash
+cat
+```
+
+Input: Type some text (e.g., "SOME INPUT") and hit ENTER.
+Output: The input will be echoed back to the terminal as standard output.
+
+**STDOUT and STDERR Example (using find)**
+
+```bash
+find /etc/ -name shadow
+```
+
+STDOUT: Displays search results (files found).
+STDERR: Shows errors like "Permission denied" when attempting to access restricted directories.
+
+You can suppress the error output by redirecting STDERR to /dev/null:
+
+```bash
+find /etc/ -name shadow 2>/dev/null
+```
+---
+
+### 3. Redirecting STDOUT and STDERR
+
+**Redirecting STDOUT to a File**: Save results to a file instead of displaying them:
+
+```bash
+find /etc/ -name shadow 2>/dev/null > results.txt
+```
+
+**Redirect STDOUT and STDERR to Separate Files**:
+
+```bash
+find /etc/ -name shadow 2> stderr.txt 1> stdout.txt
+```
+---
+
+### 4. Redirecting STDIN
+
+You can redirect standard input (STDIN) using the less-than sign (<):
+
+```bash
+cat < stdout.txt
+```
+
+This command reads the contents of stdout.txt as input for the cat command.
+---
+
+### 5. Appending STDOUT to a File
+
+If you want to append STDOUT to an existing file (instead of overwriting it):
+
+```bash
+find /etc/ -name passwd >> stdout.txt 2>/dev/null
+```
+---
+
+### 6. Redirecting STDIN Stream to a File
+
+You can use << to stream input directly into a file:
+
+```bash
+cat << EOF > stream.txt
+Some input data
+EOF
+```
+
+This will write "Some input data" to stream.txt.
+---
+
+### 7. Using Pipes (|) for Redirection
+
+Pipes allow you to pass the output of one command as the input to another command.
+
+**Filter STDOUT using grep**:
+
+```bash
+find /etc/ -name *.conf 2>/dev/null | grep systemd
+```
+
+**Count the number of results using wc**:
+
+```bash
+find /etc/ -name *.conf 2>/dev/null | grep systemd | wc -l
+```
+
+Here, the output of find is passed through grep to filter for "systemd", and then the result is passed to wc to count the lines.
+---
+
+### Key Takeaways
+
+✔️ > → Redirects STDOUT to a file (overwrites)
+
+✔️ >> → Appends STDOUT to a file
+
+✔️ < → Redirects a file to STDIN
+
+✔️ 2> → Redirects STDERR to a file
+
+✔️ 2>/dev/null → Discards STDERR 
+
+✔️ | → Pipes output to another command

@@ -1,0 +1,163 @@
+---
+title: "System Information in Linux"
+publishedAt: 2025-04-08
+summary: "A guide on essential system information commands in Linux for troubleshooting, security assessments, and system administration."
+tags: "Linux, System Information, Network, SSH"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="🔍">
+  Understanding system details is crucial for troubleshooting, security assessments, and system administration.
+</Callout>
+
+### **Why is System Information Important?**
+
+- Understanding system details is crucial for **troubleshooting, security assessments, and system administration**.
+- Knowing which commands to use helps **gather information efficiently**.
+
+---
+
+### **1. Essential System Commands**
+
+| Command    | Description                                        |
+|------------|----------------------------------------------------|
+| `whoami`   | Shows the **current username**.                    |
+| `id`       | Displays **user ID, group ID, and group memberships**. |
+| `hostname` | Prints the **system's hostname**.                  |
+| `uname`    | Shows **OS and kernel information**.               |
+| `pwd`      | Prints the **current working directory**.          |
+| `ifconfig` | Displays or configures **network interfaces**. *(Deprecated, use `ip` instead)* |
+| `ip`       | Manages **network interfaces, routes, and tunnels**. |
+| `netstat`  | Shows **network connections and listening ports**. |
+| `ss`       | An alternative to `netstat` for inspecting **network sockets**. |
+| `ps`       | Displays **running processes**.                    |
+| `who`      | Shows **logged-in users**.                         |
+| `env`      | Prints **environment variables**.                  |
+| `lsblk`    | Lists **block storage devices**.                   |
+| `lsusb`    | Lists **connected USB devices**.                   |
+| `lsof`     | Shows **open files**.                              |
+| `lspci`    | Lists **PCI devices**.                             |
+
+---
+
+### **2. Checking System Identity & User Info**
+
+#### **Find out the current user:**
+
+```bash
+whoami
+```
+
+#### **Check user ID, group ID, and group memberships:**
+
+```bash
+id
+```
+
+#### **Get the system hostname:**
+
+```bash
+hostname
+```
+
+---
+
+### **3. Getting OS & Kernel Information**
+
+#### **View general system info:**
+
+```bash
+uname -a
+```
+
+#### **Check only the kernel release (useful for exploit research):**
+
+```bash
+uname -r
+```
+
+#### **Find the machine hardware name:**
+
+```bash
+uname -m
+```
+
+---
+
+### **4. Network & Process Monitoring**
+
+#### **Check active network connections:**
+
+```bash
+netstat -tulnp
+```
+
+#### **List active network sockets (alternative to netstat):**
+
+```bash
+ss -tulnp
+```
+
+#### **Display all running processes:**
+
+```bash
+ps aux
+```
+
+#### **Check logged-in users:**
+
+```bash
+who
+```
+
+---
+
+### **5. SSH: Secure Remote Access**
+
+- **SSH allows remote access to Linux systems securely.**
+- **Basic Syntax:**
+    
+    ```bash
+    ssh user@IP_address
+    ```
+    
+- **Example:**
+    
+    ```bash
+    ssh htb-student@192.168.1.10
+    ```
+    
+- **What SSH is used for?**
+    - Secure remote system management.
+    - Running commands on remote servers.
+    - Transferring files securely (`scp` or `rsync`).
+
+---
+
+### **6. Practical Application in Security**
+
+- **Knowing these commands helps with:**
+  - ✔️ Identifying **user privileges** (useful in penetration testing).
+  - ✔️ Checking **kernel versions for vulnerabilities**.
+  - ✔️ Inspecting **network activity** to detect security risks.
+  - ✔️ **Troubleshooting system issues** in real-time.
+
+### **Key Takeaways**
+
+✔️ **Learn and use system commands daily.**
+
+✔️ **Use SSH for secure remote management.**
+
+✔️ **Always check user privileges and kernel versions for security assessments.**
+
+✔️ **Familiarize yourself with `man`, `--help`, and `-h` for deeper command understanding.**
+```
+
+This format is in line with your previous blog structure and includes all the sections clearly. Let me know if you need any further adjustments!

@@ -1,0 +1,37 @@
+---
+title: "File Descriptors and Redirections in Linux"
+publishedAt: 2025-04-08
+summary: "A comprehensive guide on understanding and using file descriptors and redirections in Linux for effective I/O management."
+tags: "Linux, Terminal, Shell, File Descriptors, Redirection"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="🔄">
+  Understanding file descriptors and redirection allows for better control over input/output operations in Linux.
+</Callout>
+
+### **File Descriptors (FD) in Linux**
+
+A **file descriptor** is a reference used by the operating system to manage I/O operations like reading from or writing to a file. Linux maintains three standard file descriptors:
+
+1. **STDIN (0)** - Standard Input: Used for reading input.
+2. **STDOUT (1)** - Standard Output: Used for displaying output.
+3. **STDERR (2)** - Standard Error: Used for displaying error messages.
+
+These default file descriptors are used in every process and can be redirected.
+
+---
+
+### **Examples of File Descriptors in Action**
+
+#### **STDIN and STDOUT Example (using `cat`)**
+
+```bash
+cat
