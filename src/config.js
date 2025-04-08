@@ -10,5 +10,5 @@ export const metaData = {
 export const socialLinks = {
   github: "https://github.com/Dupchuwangmo7/SWS202_Blogs",
   instagram: "https://www.instagram.com/?next=%2F",
-  email: "02230282.cst@rub.edu.bt",
+  email: "Gmail:02230282.cst@rub.edu.bt",
 };

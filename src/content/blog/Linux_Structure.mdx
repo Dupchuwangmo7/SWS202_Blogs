@@ -1,0 +1,97 @@
+---
+title: "Linux System Overview"
+publishedAt: 2025-04-08
+summary: "An overview of Linux history, structure, philosophy, components, and file system hierarchy."
+tags: "Linux, Operating System, System Architecture"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro";
+import Callout from "../../components/mdx/Callout.astro";
+
+<Callout emoji="🐧">
+  Linux is a powerful and widely-used open-source operating system, found in everything from smartphones to servers.
+</Callout>
+
+## Linux Structure
+
+- Linux is an operating system (OS) like Windows, macOS, iOS, or Android.
+- It manages hardware resources and enables communication between software and hardware.
+- Linux comes in multiple distributions (distros) tailored to different needs.
+
+## History
+
+<Table
+  data={{
+    headers: ["Year", "Event"],
+    rows: [
+      ["1970", "Unix OS developed by Ken Thompson & Dennis Ritchie at AT&T."],
+      ["1977", "BSD released but faced legal issues due to Unix code."],
+      ["1983", "Richard Stallman launched the GNU project with the GNU GPL."],
+      ["1991", "Linus Torvalds created the Linux kernel."],
+      ["Present", "Linux now powers desktops, servers, Android, and embedded systems."]
+    ]
+  }}
+/>
+
+## Linux Philosophy
+
+- **Everything is a file** – Even devices and settings are treated as files.
+- **Small, single-purpose programs** – Each program is designed for a specific task.
+- **Programs can be combined** – Chaining tools together using pipes.
+- **Avoid captive user interfaces** – Command-line interfaces are preferred.
+- **Configuration in text files** – Easy to read and edit, e.g., `/etc/passwd`.
+
+## Linux Components
+
+<Table
+  data={{
+    headers: ["Component", "Description"],
+    rows: [
+      ["Bootloader", "Manages booting (e.g., GRUB)."],
+      ["Kernel", "Core that controls hardware."],
+      ["Daemons", "Background services."],
+      ["Shell", "Command-line interface (e.g., Bash)."],
+      ["Graphics Server", "Handles GUIs (e.g., X-server)."],
+      ["Window Manager", "Desktop environment (e.g., GNOME)."],
+      ["Utilities", "System tools for everyday tasks."]
+    ]
+  }}
+/>
+
+## Linux Architecture
+
+1. **Hardware** – Physical devices like CPU, RAM, etc.
+2. **Kernel** – Manages memory, devices, processes.
+3. **Shell** – Lets users interact via command-line.
+4. **System Utility** – Offers core functionality and tools.
+
+## Linux File System Hierarchy
+
+<Table
+  data={{
+    headers: ["Directory", "Purpose"],
+    rows: [
+      ["/", "Root directory of the system."],
+      ["/bin", "Essential binaries (commands)."],
+      ["/boot", "Bootloader and kernel files."],
+      ["/dev", "Device files."],
+      ["/etc", "System configuration files."],
+      ["/home", "User directories."],
+      ["/lib", "Shared libraries for booting."],
+      ["/media", "Mount point for USBs/CDs."],
+      ["/mnt", "Temporary mount point."],
+      ["/opt", "Third-party optional software."],
+      ["/root", "Root user’s home directory."],
+      ["/sbin", "System binaries for admins."],
+      ["/tmp", "Temporary files."],
+      ["/usr", "User programs and libraries."],
+      ["/var", "Variable files like logs and mail."]
+    ]
+  }}
+/>
+
