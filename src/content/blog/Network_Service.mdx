@@ -1,0 +1,147 @@
+---
+title: "Network Services"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Importance of Network Services
+
+- **Network Services**: Essential for remote operations, enabling communication, file transfers, and network traffic analysis.
+- **Security Implications**: Understanding network services helps identify vulnerabilities during penetration testing, such as unencrypted connections (e.g., FTP).
+
+### Key Network Services
+
+1. **SSH (Secure Shell)**
+    - **Purpose**: Securely manage and access remote systems.
+    - **Installation**:
+        
+        ```bash
+        sudo apt install openssh-server -y
+        
+        ```
+        
+    - **Check Status**:
+        
+        ```bash
+        systemctl status ssh
+        
+        ```
+        
+    - **Usage**: Connect to a remote host:
+        
+        ```bash
+        ssh username@remote_host
+        
+        ```
+        
+    - **Configuration**: Edit `/etc/ssh/sshd_config` for settings like connection limits and authentication methods.
+2. **NFS (Network File System)**
+    - **Purpose**: Allows remote file storage and management as if they were local.
+    - **Installation**:
+        
+        ```bash
+        sudo apt install nfs-kernel-server -y
+        
+        ```
+        
+    - **Check Status**:
+        
+        ```bash
+        systemctl status nfs-kernel-server
+        
+        ```
+        
+    - **Configuration**: Edit `/etc/exports` to specify shared directories and access rights (e.g., `rw`, `ro`, `no_root_squash`).
+    - **Create NFS Share**:
+        
+        ```bash
+        mkdir nfs_sharing
+        echo '/home/user/nfs_sharing hostname(rw,sync,no_root_squash)' >> /etc/exports
+        
+        ```
+        
+    - **Mount NFS Share**:
+        
+        ```bash
+        mkdir ~/target_nfs
+        mount 10.129.12.17:/home/user/nfs_sharing ~/target_nfs
+        
+        ```
+        
+3. **Web Server**
+    - **Purpose**: Serves data and applications over the Internet using HTTP.
+    - **Common Servers**: Apache, Nginx, Lighttpd, Caddy.
+    - **Installation (Apache)**:
+        
+        ```bash
+        sudo apt install apache2 -y
+        
+        ```
+        
+    - **Configuration**: Edit `/etc/apache2/apache2.conf` to set directory access and permissions.
+    - **Example Directory Configuration**:
+        
+        ```
+        <Directory /var/www/html>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+        </Directory>
+        
+        ```
+        
+    - **File Transfer**: Use `wget` or `curl` to download files hosted on the server.
+4. **Python Web Server**
+    - **Purpose**: Simple file transfer server.
+    - **Installation**:
+        
+        ```bash
+        sudo apt install python3 -y
+        
+        ```
+        
+    - **Start Server**:
+        
+        ```bash
+        python3 -m http.server
+        
+        ```
+        
+    - **Host Specific Directory**:
+        
+        ```bash
+        python3 -m http.server --directory /path/to/directory
+        
+        ```
+        
+5. **VPN (Virtual Private Network)**
+    - **Purpose**: Creates a secure tunnel for remote access to networks.
+    - **Common Solutions**: OpenVPN, L2TP/IPsec, PPTP.
+    - **Installation (OpenVPN)**:
+        
+        ```bash
+        sudo apt install openvpn -y
+        
+        ```
+        
+    - **Configuration**: Edit `/etc/openvpn/server.conf` for settings like encryption and tunneling.
+    - **Connect to VPN**:
+        
+        ```bash
+        sudo openvpn --config path/to/config.ovpn
+        
+        ```
+        
+
+### Conclusion
+
+Understanding and managing network services in Linux is crucial for system administrators and penetration testers. Proficiency in services like SSH, NFS, web servers, and VPNs enhances security, facilitates remote operations, and aids in identifying vulnerabilities. Each service has specific installation, configuration, and usage procedures that are essential for effective network management.

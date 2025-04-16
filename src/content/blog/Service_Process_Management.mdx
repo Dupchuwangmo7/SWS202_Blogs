@@ -1,0 +1,129 @@
+---
+title: "Service and Process Management"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+
+### Overview of Services
+
+- **Services (Daemons)**: Background processes that run without direct user interaction, essential for system operation and additional functionalities.
+    - **System Services**: Required during system startup for hardware-related tasks (e.g., engine in a car).
+    - **User -Installed Services**: Added by users for specific features (e.g., air conditioning in a car).
+
+### Goals of Service/Process Management
+
+1. Start/Restart a service/process.
+2. Stop a service/process.
+3. Monitor service/process status.
+4. Enable/Disable service/process on boot.
+5. Locate a service/process.
+
+### Systemd
+
+- **Systemd**: The initialization system used by modern Linux distributions, starting as the first process during boot (PID 1).
+- **Process Information**: Accessible under `/proc/`, with each process having a unique PID and a Parent Process ID (PPID).
+
+### Managing Services with `systemctl`
+
+- **Start a Service**:
+    
+    ```bash
+    systemctl start <service_name>
+    
+    ```
+    
+- **Check Service Status**:
+    
+    ```bash
+    systemctl status <service_name>
+    
+    ```
+    
+- **Enable Service on Boot**:
+    
+    ```bash
+    systemctl enable <service_name>
+    
+    ```
+    
+- **List All Services**:
+    
+    ```bash
+    systemctl list-units --type=service
+    
+    ```
+    
+- **View Logs**:
+    
+    ```bash
+    journalctl -u <service_name> --no-pager
+    
+    ```
+    
+
+### Process Management
+
+- **Process States**:
+    - Running
+    - Waiting
+    - Stopped
+    - Zombie
+- **Killing Processes**: Use `kill`, `pkill`, `pgrep`, and `killall` to send signals to processes.
+    - Common Signals:
+        - `SIGHUP` (1): Terminal closed.
+        - `SIGINT` (2): Interrupt (Ctrl + C).
+        - `SIGKILL` (9): Force kill.
+        - `SIGTERM` (15): Graceful termination.
+        - `SIGSTOP` (19): Stop process.
+- **Example to Kill a Process**:
+    
+    ```bash
+    kill -9 <PID>
+    
+    ```
+    
+
+### Background and Foreground Processes
+
+- **Background a Process**: Use `Ctrl + Z` to suspend, then `bg` to continue in the background.
+- **Start a Process in Background**: Append `&` to the command.
+- **List Background Processes**:
+    
+    ```bash
+    jobs
+    
+    ```
+    
+- **Foreground a Process**: Use `fg <job_id>` to bring a background process to the foreground.
+
+### Executing Multiple Commands
+
+- **Semicolon (`;`)**: Executes commands sequentially, ignoring errors.
+    
+    ```bash
+    command1; command2; command3
+    
+    ```
+    
+- **Double Ampersand (`&&`)**: Executes the next command only if the previous one succeeds.
+    
+    ```bash
+    command1 && command2 && command3
+    
+    ```
+    
+- **Pipes (`|`)**: Directs the output of one command as input to another.
+
+### Conclusion
+
+Understanding service and process management in Linux is crucial for maintaining system functionality and performance. Utilizing commands like `systemctl`, `kill`, and job control features allows users to effectively manage background and foreground processes.

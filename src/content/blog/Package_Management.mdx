@@ -1,0 +1,110 @@
+---
+title: "Package management"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+# Package Management
+
+### 🔹 **What Are Packages?**
+
+- Bundles of software including:
+    - Binaries
+    - Config files
+    - Dependency information
+    - Update/upgrade tracking
+
+---
+
+### 🔹 **Why Package Management Matters**
+
+- Handles installation, updates, and removal of software
+- Resolves dependencies automatically
+- Maintains consistency across systems
+- Prevents version conflicts
+
+---
+
+### 🔹 **Common Linux Package Managers & Tools**
+
+| Command | Description |
+| --- | --- |
+| `dpkg` | Installs/removes `.deb` files (low-level tool) |
+| `apt` | High-level tool for managing Debian-based systems (like Ubuntu, Parrot OS) |
+| `aptitude` | Alternative to `apt`, often with a more interactive interface |
+| `snap` | Installs Snap packages (sandboxed software) |
+| `gem` | Ruby's package manager |
+| `pip` | Python package manager |
+| `git` | Used to clone/download projects from Git repositories |
+
+---
+
+### 🔹 **APT in Action**
+
+```bash
+# Search for packages
+apt-cache search impacket
+
+# View package details
+apt-cache show impacket-scripts
+
+# List all installed packages
+apt list --installed
+
+# Install a package with automatic "yes"
+sudo apt install impacket-scripts -y
+
+```
+
+---
+
+### 🔹 **Working With Git**
+
+```bash
+# Create folder and clone a Git repo
+mkdir ~/nishang/
+git clone https://github.com/samratashok/nishang.git ~/nishang/
+
+```
+
+---
+
+### 🔹 **Install .deb Files Manually**
+
+1. Download with `wget`:
+
+```bash
+wget http://archive.ubuntu.com/ubuntu/pool/main/s/strace/strace_4.21-1ubuntu1_amd64.deb
+
+```
+
+1. Install using `dpkg`:
+
+```bash
+sudo dpkg -i strace_4.21-1ubuntu1_amd64.deb
+
+```
+
+1. Confirm it works:
+
+```bash
+strace -h
+
+```
+
+---
+
+### 🧠 **Tips**
+
+- Always use `apt` over `dpkg` when possible—it handles dependencies automatically.
+- Update your APT repo lists regularly with `sudo apt update`.
+- Check which repos your system uses via `/etc/apt/sources.list` or `/etc/apt/sources.list.d/`.

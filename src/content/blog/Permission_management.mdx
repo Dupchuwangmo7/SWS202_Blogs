@@ -1,0 +1,183 @@
+---
+title: "Understanding Linux File Permissions"
+publishedAt: 2025-04-15
+summary: "A detailed guide on managing Linux file and directory permissions, including chmod, chown, and special bits like SUID, SGID, and Sticky Bit."
+tags: " Linux, Permissions, Sticky Bit "
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="🔐">
+  Linux file permissions play a crucial role in securing the system and defining who can access or modify resources.
+</Callout>
+
+
+### **Permissions Management**
+
+---
+
+### **1. Introduction**
+
+Linux permissions function like keys, regulating access to files and directories. Every file or directory is owned by a **user** and belongs to a **group**. Permissions dictate what actions each user type (owner, group, others) can perform, enabling secure and organized access to system resources.
+
+---
+
+### **2. File Permissions Overview**
+
+Permissions in Linux are divided into three types:
+
+| Symbol | Meaning |
+| --- | --- |
+| `r` | Read |
+| `w` | Write |
+| `x` | Execute (or traverse for directories) |
+
+They are set for three entities:
+
+- **User (owner)**
+- **Group**
+- **Others**
+
+Example output of `ls -l`:
+
+```bash
+-rwxrw-r-- 1 user group 1234 May 4 12:00 example.txt
+```
+
+This shows:
+
+- Owner has read, write, execute permissions  
+- Group has read, write  
+- Others have read only  
+
+---
+
+### **3. Directory Permissions**
+
+- **Read (r)**: View file names in the directory  
+- **Write (w)**: Create, delete, or rename files in the directory  
+- **Execute (x)**: Traverse or "cd" into the directory  
+
+<Callout emoji="🚫">
+  Without execute permission on a directory, users cannot enter it—even if they can see its contents.
+</Callout>
+
+Example error message:
+
+```bash
+ls: cannot access 'mydirectory/script.sh': Permission denied
+```
+
+Output from `ls -al` may show `?????????` when permissions are missing.
+
+---
+
+### **4. Numeric Permission Representation**
+
+Permissions can also be represented using **octal notation**:
+
+| Permission | Binary | Octal |
+| --- | --- | --- |
+| rwx | 111 | 7 |
+| rw- | 110 | 6 |
+| r-- | 100 | 4 |
+| r-x | 101 | 5 |
+
+So `chmod 754 file` sets:
+
+- Owner: `rwx` (7)  
+- Group: `r-x` (5)  
+- Others: `r--` (4)
+
+---
+
+### **5. Modifying Permissions**
+
+Use the `chmod` command:
+
+**Symbolic Method:**
+
+```bash
+chmod a+r file     # Add read for all users
+chmod g-w file     # Remove write from group
+```
+
+**Octal Method:**
+
+```bash
+chmod 754 file     # Owner: rwx, Group: r-x, Others: r--
+```
+
+---
+
+### **6. Changing Ownership**
+
+Use `chown` to change the owner and group:
+
+```bash
+chown user:group file
+```
+
+Example:
+
+```bash
+chown root:root shell
+```
+
+---
+
+### **7. Special Permissions**
+
+#### 🔸 **SUID (Set User ID)**
+
+- Symbol: `s` in owner's execute position (`rws`)  
+- File runs with **owner's** privileges.
+
+#### 🔸 **SGID (Set Group ID)**
+
+- Symbol: `s` in group's execute position  
+- File runs with **group's** privileges.
+
+<Callout emoji="⚠️">
+  Example: If `journalctl` has SUID and allows shell access, any user could get a root shell — a major risk!
+</Callout>
+
+#### 🔸 **Sticky Bit**
+
+- Applies to **directories**  
+- Allows only **owners or root** to delete/rename files  
+- Symbol: `t` or `T` in the others' execute position
+
+| Symbol | Meaning |
+| --- | --- |
+| `t` | Sticky bit set, others **have execute** |
+| `T` | Sticky bit set, others **lack execute** |
+
+Example:
+
+```bash
+drwxrwxrwt 3 user group 4096 Jan 12 12:30 scripts   # with sticky bit and execute
+drwxrwxrwT 3 user group 4096 Jan 12 12:32 reports   # sticky bit without execute
+```
+
+---
+
+### **8. Summary Table**
+
+| Feature | Description |
+| --- | --- |
+| `r` | Read file or list directory contents |
+| `w` | Modify file or directory contents |
+| `x` | Execute file or traverse directory |
+| `chmod` | Change file/directory permissions |
+| `chown` | Change file/directory ownership |
+| `SUID` | Execute file as owner |
+| `SGID` | Execute file as group |
+| `Sticky Bit` | Restricts file deletion in shared directories to file owners |
+```

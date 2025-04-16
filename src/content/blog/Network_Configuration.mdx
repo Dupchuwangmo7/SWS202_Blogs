@@ -1,0 +1,178 @@
+---
+title: "Network Configuration"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Importance of Network Configuration
+
+- **Network Configuration**: Essential for penetration testers to set up testing environments, manipulate network traffic, and identify vulnerabilities.
+- **Key Skills**: Managing network interfaces, understanding network protocols (TCP/IP, DNS, DHCP, FTP), and troubleshooting connectivity issues.
+
+### Network Access Control (NAC)
+
+- **NAC**: Enhances network security by ensuring only authorized devices can access the network.
+- **Key NAC Models**:
+    - **Discretionary Access Control (DAC)**: Resource owners set permissions for access.
+    - **Mandatory Access Control (MAC)**: Permissions enforced by the operating system, providing more security but less flexibility.
+    - **Role-Based Access Control (RBAC)**: Permissions assigned based on user roles within an organization.
+
+### Configuring Network Interfaces
+
+- **Tools**: Use `ifconfig` (deprecated) or `ip` command to manage network interfaces.
+- **View Network Interfaces**:
+    
+    ```bash
+    ifconfig
+    
+    ```
+    
+    or
+    
+    ```bash
+    ip addr
+    
+    ```
+    
+- **Activate Network Interface**:
+    
+    ```bash
+    sudo ifconfig eth0 up
+    
+    ```
+    
+    or
+    
+    ```bash
+    sudo ip link set eth0 up
+    
+    ```
+    
+- **Assign IP Address**:
+    
+    ```bash
+    sudo ifconfig eth0 192.168.1.2
+    
+    ```
+    
+- **Set Netmask**:
+    
+    ```bash
+    sudo ifconfig eth0 netmask 255.255.255.0
+    
+    ```
+    
+- **Set Default Gateway**:
+    
+    ```bash
+    sudo route add default gw 192.168.1.1 eth0
+    
+    ```
+    
+- **Configure DNS**: Edit `/etc/resolv.conf` to set DNS servers.
+    
+    ```bash
+    sudo vim /etc/resolv.conf
+    
+    ```
+    
+    Example:
+    
+    ```
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+    
+    ```
+    
+- **Persistent Network Configuration**: Edit `/etc/network/interfaces` to ensure settings persist across reboots.
+    
+    ```bash
+    sudo vim /etc/network/interfaces
+    
+    ```
+    
+    Example:
+    
+    ```
+    auto eth0
+    iface eth0 inet static
+        address 192.168.1.2
+        netmask 255.255.255.0
+        gateway 192.168.1.1
+        dns-nameservers 8.8.8.8 8.8.4.4
+    
+    ```
+    
+- **Restart Networking Service**:
+    
+    ```bash
+    sudo systemctl restart networking
+    
+    ```
+    
+
+### Network Monitoring and Troubleshooting
+
+- **Network Monitoring**: Capturing and analyzing network traffic to identify threats and performance issues.
+- **Common Tools**:
+    - **Ping**: Tests connectivity.
+        
+        ```bash
+        ping 8.8.8.8
+        
+        ```
+        
+    - **Traceroute**: Traces the route packets take to a destination.
+        
+        ```bash
+        traceroute www.example.com
+        
+        ```
+        
+    - **Netstat**: Displays active network connections.
+        
+        ```bash
+        netstat -a
+        
+        ```
+        
+    - **Tcpdump**: Captures network packets for analysis.
+    - **Wireshark**: GUI tool for detailed network traffic analysis.
+    - **Nmap**: Network scanning tool for discovering hosts and services.
+
+### Hardening Network Security
+
+- **Security Mechanisms**:
+    - **SELinux**: Mandatory access control system that enforces security policies.
+    - **AppArmor**: Simpler MAC system using application profiles for access control.
+    - **TCP Wrappers**: Host-based access control tool that restricts access to network services based on IP addresses.
+
+### SELinux vs. AppArmor vs. TCP Wrappers
+
+- **SELinux**: Offers fine-grained control but can be complex to configure.
+- **AppArmor**: Easier to manage with profile-based security.
+- **TCP Wrappers**: Simple IP-based access control, less granular than SELinux or AppArmor.
+
+### Setting Up Security Measures
+
+- **SELinux Tasks**:
+    1. Install and configure SELinux.
+    2. Set permissions for specific users and resources.
+- **AppArmor Tasks**:
+    1. Install and configure AppArmor.
+    2. Set access controls for applications.
+- **TCP Wrappers Tasks**:
+    1. Configure access for specific IP addresses to network services.
+
+### Conclusion
+
+Mastering network configuration in Linux is crucial for penetration testers. Understanding how to manage network interfaces, implement network access control, monitor traffic, and harden security measures enables effective testing and enhances overall network security. Familiarity with tools and techniques for troubleshooting and securing networks is essential for identifying and mitigating vulnerabilities.

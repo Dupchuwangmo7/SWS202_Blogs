@@ -1,0 +1,129 @@
+---
+title: "Containerization"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Overview of Containerization
+
+- **Containerization**: The process of packaging applications in isolated environments called containers, which provide lightweight and consistent environments for applications to run.
+- **Key Technologies**: Docker, Docker Compose, and Linux Containers (LXC) are commonly used for containerization in Linux systems.
+- **Benefits**:
+    - **Lightweight**: Containers share the host system's kernel, making them more efficient than virtual machines.
+    - **Isolation**: Containers isolate applications from each other and the host system, enhancing security.
+    - **Portability**: Applications run consistently across different environments, simplifying deployment and scaling.
+
+### Docker
+
+- **Docker**: An open-source platform for automating the deployment of applications as containers.
+- **Analogy**: Docker containers are like sealed lunchboxes containing everything needed to run an application. When closed, they reset, and new containers can be created from a Dockerfile (recipe).
+
+**Installation**:
+
+```bash
+#!/bin/bash
+# Preparation
+sudo apt update -y
+sudo apt install ca-certificates curl gnupg lsb-release -y
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL <https://download.docker.com/linux/ubuntu/gpg> | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] <https://download.docker.com/linux/ubuntu> $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# Install Docker Engine
+sudo apt update -y
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose -y
+# Add user to Docker group
+sudo usermod -aG docker $USER
+echo '[!] You need to log out and log back in for the group changes to take effect.'
+# Test Docker installation
+docker run hello-world
+
+```
+
+### Creating Docker Images
+
+- **Dockerfile**: A text file containing instructions for building a Docker image.
+- **Example Dockerfile**:
+
+```bash
+# Use the latest Ubuntu 22.04 LTS as the base image
+FROM ubuntu:22.04
+# Update the package repository and install required packages
+RUN apt-get update && \\
+    apt-get install -y apache2 openssh-server && \\
+    rm -rf /var/lib/apt/lists/*
+# Create a new user
+RUN useradd -m docker-user && \\
+    echo "docker-user:password" | chpasswd
+# Set permissions
+RUN chown -R docker-user:docker-user /var/www/html && \\
+    usermod -aG sudo docker-user && \\
+    echo "docker-user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# Expose ports
+EXPOSE 22 80
+# Start services
+CMD service ssh start && /usr/sbin/apache2ctl -D FOREGROUND
+
+```
+
+- **Build the Docker Image**:
+
+```bash
+docker build -t FS_docker .
+
+```
+
+- **Run the Docker Container**:
+
+```bash
+docker run -p 8022:22 -p 8080:80 -d FS_docker
+
+```
+
+### Docker Management Commands
+
+- **Common Commands**:
+    - `docker ps`: List running containers.
+    - `docker stop <container>`: Stop a running container.
+    - `docker start <container>`: Start a stopped container.
+    - `docker restart <container>`: Restart a running container.
+    - `docker rm <container>`: Remove a container.
+    - `docker rmi <image>`: Remove a Docker image.
+    - `docker logs <container>`: View logs of a container.
+
+### Linux Containers (LXC)
+
+- **LXC**: A lightweight virtualization technology that allows multiple isolated Linux systems (containers) to run on a single host.
+- **Installation**:
+
+```bash
+sudo apt-get install lxc lxc-utils -y
+
+```
+
+- **Creating an LXC Container**:
+
+```bash
+sudo lxc-create -n linuxcontainer -t ubuntu
+
+```
+
+- **Managing LXC Containers**:
+    - `lxc-ls`: List existing containers.
+    - `lxc-start -n <container>`: Start a container.
+    - `lxc-stop -n <container>`: Stop a container.
+    - `lxc-attach -n <container>`: Connect to a container.
+
+### Security Considerations
+
+- **Isolation**: Containers provide a level of isolation, but they do not offer the same security as traditional virtual machines.
+- **Privilege Escalation Risks**: Containers can be vulnerable to privilege escalation or escape attacks if not properly managed.
+- **Resource Limits**: Use cgroups to limit CPU and memory usage for containers

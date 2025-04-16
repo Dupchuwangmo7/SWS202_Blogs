@@ -1,0 +1,110 @@
+---
+title: "Working with Web Services"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Overview of Web Servers
+
+- **Web Servers**: Essential for communication between browsers and web applications. They serve content over the Internet using protocols like HTTP.
+- **Popular Web Servers**: Apache, Nginx, and IIS. Apache is widely used due to its modularity and extensive features.
+
+### Apache Web Server
+
+- **Modularity**: Apache can be extended with modules (e.g., `mod_ssl` for encryption, `mod_proxy` for traffic routing).
+- **Dynamic Content**: Supports server-side scripting languages like PHP, Perl, Ruby, Python, and JavaScript for generating dynamic web pages.
+
+**Installation**:
+
+```bash
+sudo apt install apache2 -y
+
+```
+
+**Starting Apache**:
+
+```bash
+sudo systemctl start apache2
+
+```
+
+**Accessing Apache**:
+
+- Navigate to `http://localhost` in a web browser to view the default Apache page.
+- If port 80 is occupied, change the port in `/etc/apache2/ports.conf` (e.g., set to port 8080):
+    
+    ```
+    Listen 8080
+    
+    ```
+    
+
+**Restart Apache**:
+
+```bash
+sudo systemctl restart apache2
+
+```
+
+**Verify with Curl**:
+
+```bash
+curl -I <http://localhost:8080>
+
+```
+
+### Command-Line Tools for Web Interaction
+
+1. **cURL**
+    - **Purpose**: Transfer files and interact with web servers over various protocols (HTTP, HTTPS, FTP, etc.).
+    - **Example Usage**:
+        
+        ```bash
+        curl <http://localhost>
+        
+        ```
+        
+    - **Output**: Displays the HTML source of the webpage.
+2. **Wget**
+    - **Purpose**: Download files from web servers directly to the local system.
+    - **Example Usage**:
+        
+        ```bash
+        wget <http://localhost>
+        
+        ```
+        
+    - **Output**: Saves the webpage content to a file (e.g., `index.html`).
+3. **Python HTTP Server**
+    - **Purpose**: Quickly set up a simple web server using Python.
+    - **Start Server**:
+        
+        ```bash
+        python3 -m http.server
+        
+        ```
+        
+    - **Access**: Navigate to `http://localhost:8000` in a web browser.
+
+### Logging and Monitoring
+
+- When using the Python HTTP server, requests made to the server are logged in the terminal, showing the status of each request.
+
+### Penetration Testing Considerations
+
+- Understanding web servers and their configurations is crucial for identifying vulnerabilities.
+- Tools like cURL and wget are essential for testing and interacting with web applications.
+- Emphasize creative problem-solving and research skills to tackle unique challenges in penetration testing.
+
+### Conclusion
+
+Working with web services in Linux involves setting up and configuring web servers, utilizing command-line tools for interaction, and understanding the implications for security and penetration testing. Mastery of these skills is essential for effective web development and security assessments.

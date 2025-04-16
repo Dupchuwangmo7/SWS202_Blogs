@@ -1,0 +1,142 @@
+---
+title: "Remote Desktop protocols in Linux"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Overview of Remote Desktop Protocols
+
+- **Remote Desktop Protocols**: Enable graphical remote access to systems, allowing administrators to manage and troubleshoot systems remotely.
+- **Common Protocols**:
+    - **Remote Desktop Protocol (RDP)**: Primarily used in Windows environments for remote desktop access.
+    - **Virtual Network Computing (VNC)**: Popular in Linux environments, providing graphical access to remote desktops.
+
+### XServer and X11
+
+- **XServer**: The user-side component of the X Window System (X11), allowing graphical user interfaces on Unix/Linux systems.
+- **Network Transparency**: X11 can operate over TCP/IP, enabling remote access to applications.
+- **Ports**: X11 typically uses TCP ports 6000-6010 for communication.
+- **Security**: X11 is not secure by default; data transmission is unencrypted. Use SSH tunneling for secure connections.
+    - **Enable X11 Forwarding**:
+    Set `X11Forwarding yes`.
+        
+        ```bash
+        sudo vim /etc/ssh/sshd_config
+        
+        ```
+        
+- **Start Application via SSH**:
+    
+    ```bash
+    ssh -X user@remote_host /usr/bin/firefox
+    
+    ```
+    
+
+### XDMCP
+
+- **X Display Manager Control Protocol (XDMCP)**: Used for managing remote X Window sessions, but is insecure and should be avoided in high-security environments.
+- **Vulnerabilities**: Susceptible to man-in-the-middle attacks.
+
+### VNC
+
+- **Virtual Network Computing (VNC)**: A remote desktop sharing system that allows users to control a computer remotely.
+- **Security**: VNC can use encryption and requires authentication for access.
+- **Ports**: VNC servers typically listen on TCP port 5900 and higher for additional displays (e.g., 5901, 5902).
+- **Common VNC Tools**: TigerVNC, TightVNC, RealVNC, UltraVNC.
+
+**Setting Up a TigerVNC Server**:
+
+1. **Install Required Packages**:
+    
+    ```bash
+    sudo apt install xfce4 xfce4-goodies tigervnc-standalone-server -y
+    
+    ```
+    
+2. **Set VNC Password**:
+    
+    ```bash
+    vncpasswd
+    
+    ```
+    
+3. **Create Configuration Files**:
+    
+    ```bash
+    touch ~/.vnc/xstartup ~/.vnc/config
+    
+    ```
+    
+    - **xstartup**:
+        
+        ```bash
+        #!/bin/bash
+        unset SESSION_MANAGER
+        unset DBUS_SESSION_BUS_ADDRESS
+        /usr/bin/startxfce4
+        [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+        [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+        x-window-manager &
+        
+        ```
+        
+    - **config**:
+        
+        ```
+        geometry=1920x1080
+        dpi=96
+        
+        ```
+        
+4. **Make xstartup Executable**:
+    
+    ```bash
+    chmod +x ~/.vnc/xstartup
+    
+    ```
+    
+5. **Start the VNC Server**:
+    
+    ```bash
+    vncserver
+    
+    ```
+    
+6. **List VNC Sessions**:
+    
+    ```bash
+    vncserver -list
+    
+    ```
+    
+
+### Secure VNC Connection
+
+- **Create SSH Tunnel**:
+    
+    ```bash
+    ssh -L 5901:127.0.0.1:5901 -N -f -l user remote_host
+    
+    ```
+    
+- **Connect to VNC Server**:
+    
+    ```bash
+    xtightvncviewer localhost:5901
+    
+    ```
+    
+
+### Conclusion
+
+Remote desktop protocols like RDP and VNC are essential for managing and troubleshooting systems remotely. Understanding how to configure and secure these protocols, along with using tools like XServer and SSH tunneling, enhances the ability to perform effective remote administration and penetration testing. Awareness of security vulnerabilities and proper configuration practices is crucial for maintaining secure remote access.
