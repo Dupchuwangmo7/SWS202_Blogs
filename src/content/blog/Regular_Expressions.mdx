@@ -1,0 +1,54 @@
+---
+title: "Regular Expressions"
+publishedAt: 2025-04-15
+summary: "A concise guide to understanding and using Regular Expressions (RegEx) with practical grep examples."
+tags: "Linux, RegEx, grep, Text Processing"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro"; 
+
+<Callout emoji="🔍">
+  Regular Expressions (RegEx) are essential for efficient pattern matching, data extraction, and text manipulation in Linux.
+</Callout>
+
+### **1. Introduction**
+
+Regular Expressions, commonly known as **RegEx**, are powerful tools used for pattern matching in text. They help with searching, replacing, and manipulating data efficiently—especially in tasks like data analysis and configuration inspection.
+
+---
+
+### **2. What is a Regular Expression?**
+
+A regular expression is a sequence of characters that defines a **search pattern**. These patterns use **metacharacters**—special symbols that provide rules for matching characters.
+
+They are supported in many programming languages and tools such as `grep`, `sed`, `awk`, and more.
+
+---
+
+### **3. Grouping and Operators in RegEx**
+
+<Table data={{
+  headers: ["Operator", "Description"],
+  rows: [
+    ["( )", "Group expressions."],
+    ["[ ]", "Character classes. e.g., [a-z]"],
+    ["{ }", "Quantifiers. e.g., {1,10}"],
+    ["|", "OR operator"],
+    [".*", "Match any characters (used like AND)"]
+  ]
+}} />
+
+---
+
+### **4. Examples Using `grep` with RegEx**
+
+**OR Operator Example:**
+
+```bash
+grep -E "(my|false)" /etc/passwd
