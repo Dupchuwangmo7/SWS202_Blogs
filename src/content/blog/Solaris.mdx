@@ -1,0 +1,161 @@
+---
+title: "Solaris"
+publishedAt: 2025-04-09
+summary: "Learn how Linux package managers work, how to install software, and manage dependencies with apt, dpkg, and more."
+tags: "Linux, Package Management, apt, dpkg, Terminal, Software Installation"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Overview of Solaris
+
+- **Definition**: Solaris is a Unix-based operating system developed by Sun Microsystems (now Oracle Corporation) known for its robustness, scalability, and support for high-end hardware.
+- **Use Cases**: Commonly used in enterprise environments for mission-critical applications, including database management, cloud computing, and virtualization.
+- **Key Features**:
+    - Built-in hypervisor (Oracle VM Server for SPARC) for running multiple virtual machines.
+    - High availability, fault tolerance, and system management capabilities.
+
+### Comparison: Solaris vs. Linux Distributions
+
+- **Proprietary vs. Open Source**: Solaris is proprietary, while most Linux distributions are open-source.
+- **File Systems**: Solaris uses the Zettabyte File System (ZFS), while many Linux distributions use ext4 or other file systems.
+- **Service Management**: Solaris employs the Service Management Facility (SMF) for managing system services, whereas Linux uses systemd or init systems.
+
+### Directory Structure in Solaris
+
+| Directory | Description |
+| --- | --- |
+| `/` | Root directory containing all other directories and files. |
+| `/bin` | Essential system binaries required for booting and basic operations. |
+| `/boot` | Boot-related files, including boot loader and kernel images. |
+| `/dev` | Device files representing physical and logical devices. |
+| `/etc` | System configuration files, including startup scripts and user authentication data. |
+| `/home` | Users' home directories. |
+| `/kernel` | Kernel modules and related files. |
+| `/lib` | Libraries required by binaries in `/bin` and `/sbin`. |
+| `/lost+found` | Used for file system consistency checks and repairs. |
+| `/mnt` | Temporary mount points for file systems. |
+| `/opt` | Optional software packages installed on the system. |
+| `/proc` | Virtual file system providing process and kernel status. |
+| `/sbin` | System binaries for administration tasks. |
+| `/tmp` | Temporary files created by the system and applications. |
+| `/usr` | System-wide read-only data and programs. |
+| `/var` | Variable data files, including logs and mail spools. |
+
+### Unique Features of Solaris
+
+- **High-End Hardware Support**: Designed for large-scale data centers and complex network infrastructures.
+- **Image Packaging System (IPS)**: A powerful package manager for managing software packages and updates.
+- **Advanced Security Features**: Role-Based Access Control (RBAC) and mandatory access controls.
+
+### Key Differences Between Solaris and Linux
+
+- **Source Code**: Solaris is proprietary; its source code is not publicly available, while Linux distributions are open-source.
+- **Package Management**: Solaris uses `pkgadd`, while Linux distributions like Ubuntu use `apt-get`.
+- **System Information Commands**:
+    - **Linux**: `uname -a`
+    - **Solaris**: `showrev -a`
+
+### Package Installation Example
+
+- **Ubuntu**:
+    
+    ```bash
+    sudo apt-get install apache2
+    
+    ```
+    
+- **Solaris**:
+    
+    ```bash
+    pkgadd -d SUNWapchr
+    
+    ```
+    
+
+### Permission Management
+
+- **Change Permissions**: Both Solaris and Linux use `chmod`.
+    
+    ```bash
+    chmod 700 filename
+    
+    ```
+    
+- **Find Files with Specific Permissions**:
+    - **Linux**:
+        
+        ```bash
+        find / -perm 4000
+        
+        ```
+        
+    - **Solaris**:
+        
+        ```bash
+        find / -perm -4000
+        
+        ```
+        
+
+### NFS Configuration in Solaris
+
+- **Share a Directory**:
+    
+    ```bash
+    share -F nfs -o rw /export/home
+    
+    ```
+    
+- **Mount an NFS Share**:
+    
+    ```bash
+    mount -F nfs 10.129.15.122:/nfs_share /mnt/local
+    
+    ```
+    
+
+### Process Management
+
+- **List Open Files**:
+    - **Linux**: `lsof`
+        
+        ```bash
+        sudo lsof -c apache2
+        
+        ```
+        
+    - **Solaris**: `pfiles`
+        
+        ```bash
+        pfiles `pgrep httpd`
+        
+        ```
+        
+
+### System Call Tracing
+
+- **Linux**: `strace`
+    
+    ```bash
+    sudo strace -p `pgrep apache2`
+    
+    ```
+    
+- **Solaris**: `truss`
+    
+    ```bash
+    truss ls
+    
+    ```
+    
+
+### Conclusion
+
+Solaris is a powerful Unix-based operating system designed for enterprise environments, offering robust features for high availability, security, and scalability. Understanding its unique characteristics, directory structure, and command usage is essential for system administrators and penetration testers working in Solaris environments. The differences between Solaris and Linux distributions highlight the importance of familiarity with both systems for effective management and security assessments.
