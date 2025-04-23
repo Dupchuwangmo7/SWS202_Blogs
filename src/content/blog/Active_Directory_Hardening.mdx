@@ -1,0 +1,94 @@
+---
+title: "THM- Active Directory Hardening"
+publishedAt: 2025-04-22
+summary: ""
+tags: "THM"
+---
+
+
+# Active Directory Hardening Notes
+
+## Task 1: Introduction
+- Active Directory (AD) is critical for managing networks in large organizations.
+- This module focuses on applying best cybersecurity practices to harden AD environments.
+
+## Task 2: General Active Directory Concepts
+### Important Terms
+- **Domain**: The fundamental unit in AD, containing information about network objects.
+- **Domain Controller (DC)**: A server that handles authentication and authorization for a domain.
+- **Trees and Forests**:
+  - **Trees**: Groups of domains that share resources through trust relationships, either one-way or two-way.
+  - **Forests**: Collections of trees that share a global catalog and a common directory structure.
+
+### Trust Relationships in AD
+- **Trusts**: Allow communication and resource sharing between domains.
+  - **Transitive Trusts**: Extend trust automatically between related domains.
+  - **Non-Transitive Trusts**: Trust is limited to explicitly defined domains.
+  - **One-Way Trusts**: Only one domain trusts the other.
+  - **Two-Way Trusts**: Both domains trust each other equally.
+
+### Containers and Leaf Objects
+- AD objects can be **containers** (holding other objects) or **leaf objects** (standalone, no child objects).
+
+### Root Domain
+- **Root Domain of the attached AD environment**: `tryhackme.loc`
+
+## Task 3: Strengthening Authentication
+### Security Settings
+- **LAN Manager Hash**: Older, weaker password hashing method; should be disabled.
+- **SMB Signing**: Ensures data integrity on the network, protecting against Man-in-the-Middle (MiTM) attacks.
+- **LDAP Signing**: Requires LDAP communications to be signed to prevent replay attacks and MiTM threats.
+- **Password Rotation**: Regular updates are crucial. Best practices include:
+  - Automating password changes.
+  - Implementing Multi-Factor Authentication (MFA).
+  - Using Group Managed Service Accounts (gMSAs) for secure automatic password management.
+
+### Password Standards
+- **Default Minimum Length**: 7 characters.
+- **Recommended Policy Settings**:
+  - Enforce password history to prevent reuse.
+  - Set a minimum length (10–14 characters is advised).
+  - Require complexity (uppercase, lowercase, numbers, and symbols).
+
+## Task 4: Applying the Least Privilege Model
+### Key Principles
+- Grant users and systems only the permissions they absolutely need to minimize security risks.
+- **Account Types**:
+  - **User Accounts**: For regular daily tasks.
+  - **Privileged Accounts**: For administrative operations.
+  - **Shared Accounts**: Should be avoided when possible due to auditability issues.
+
+### Tiered Access Strategy
+- **Tier 0**: Domain Controllers and critical admin accounts.
+- **Tier 1**: Servers and applications within the domain.
+- **Tier 2**: End-user workstations and general user accounts.
+
+### Quick Checks
+- **Should Computers and Printers be added to Tier 0?**: No
+- **Should a vendor have a high-privilege account?**: No
+
+## Task 5: Microsoft Security Compliance Toolkit
+### Implementing Security Baselines
+- Install security baselines using Microsoft's Security Compliance Toolkit.
+- **BaselineLocalInstall Script**:
+  - **Flag**: `THM{00001}`
+- **MergePolicyRule Script (Policy Analyzer)**:
+  - **Flag**: `{THM00191}`
+
+## Task 6: Defense Against Common Threats
+### Major Threats
+- **Kerberoasting**: Attackers request service tickets and attempt offline password cracking.
+- **Weak Passwords**: Strong password policies help mitigate this risk.
+- **RDP Brute Force**: Avoid exposing Remote Desktop Protocol (RDP) directly to the internet.
+- **Public File Shares**: Regularly review and restrict access to network shares.
+
+### Quick Questions
+- **Is Kerberoasting an offline password cracking technique?**: Yes
+- **How many users share the same password as `aaron.booth`?**: 186
+
+## Task 7: Windows Active Directory Hardening Cheat Sheet
+- Securing Active Directory is an ongoing effort requiring cooperation between system admins and users.
+- The techniques discussed here form a strong foundation for AD hardening, with future modules diving deeper into Group Policy enforcement and least privilege implementation.
+
+---
+

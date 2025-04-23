@@ -1,0 +1,66 @@
+---
+title: "Footprinting- Windows Remote Management Protocols"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on Windows Remote Management Protocols
+
+## Overview
+Windows servers can be managed locally or remotely using various protocols and tools. Remote management is enabled by default starting with Windows Server 2016 and includes features such as the WS-Management protocol, hardware diagnostics, and control through baseboard management controllers.
+
+## Key Components for Remote Management
+1. **Remote Desktop Protocol (RDP)**
+2. **Windows Remote Management (WinRM)**
+3. **Windows Management Instrumentation (WMI)**
+
+### Remote Desktop Protocol (RDP)
+- **Purpose**: Developed by Microsoft for remote access to Windows computers, allowing GUI control over IP networks.
+- **Default Port**: TCP 3389 (also uses UDP 3389).
+- **Security**: RDP supports Transport Layer Security (TLS/SSL) for encrypting data, but many systems may accept inadequate encryption.
+- **Configuration**: The Remote Desktop service is installed by default and can be activated via Server Manager. It typically requires Network Level Authentication (NLA).
+
+#### Footprinting the RDP Service
+- **Nmap Command**:
+  ```bash
+  nmap -sV -sC 10.129.201.248 -p3389 --script rdp*
+  ```
+- **Sample Output**:
+  ```
+  PORT STATE SERVICE VERSION
+  3389/tcp open ms-wbt-server Microsoft Terminal Services
+  | rdp-ntlm-info:
+  | Target_Name: ILF-SQL-01
+  | Product_Version: 10.0.17763
+  ```
+
+### Windows Remote Management (WinRM)
+- **Purpose**: A command-line based remote management protocol that uses SOAP to connect to remote hosts.
+- **Default Ports**: TCP 5985 (HTTP) and TCP 5986 (HTTPS).
+- **Usage**: WinRM allows for remote command execution and is essential for services like PowerShell remoting.
+
+#### Footprinting the WinRM Service
+- **Nmap Command**:
+  ```bash
+  nmap -sV -sC 10.129.201.248 -p5985,5986 --disable-arp-ping -n
+  ```
+- **Sample Output**:
+  ```
+  PORT STATE SERVICE VERSION
+  5985/tcp open http Microsoft HTTPAPI httpd 2.0
+  ```
+
+### Windows Management Instrumentation (WMI)
+- **Purpose**: Provides a standardized interface for managing and monitoring Windows systems.
+- **Access**: Typically accessed via PowerShell, VBScript, or WMIC.
+- **Communication**: Initializes on TCP port 135, then moves to a random port for further communication.
+
+#### Footprinting the WMI Service
+- **Using Impacket's wmiexec.py**:
+  ```bash
+  /usr/share/doc/python3-impacket/examples/wmiexec.py Cry0l1t3:"P455w0D!"@10.129.201.248
+  ```
+
+## Conclusion
+Understanding and experimenting with these Windows remote management protocols is crucial for effective system administration and security assessments. Setting up a Windows Server VM to explore these services can provide valuable hands-on experience.

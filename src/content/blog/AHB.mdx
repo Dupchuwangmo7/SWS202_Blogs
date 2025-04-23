@@ -1,0 +1,79 @@
+---
+title: "THM- Active Directory Basic"
+publishedAt: 2025-04-22
+summary: ""
+tags: "THM"
+---
+
+
+## Introduction to Active Directory
+- Active Directory (AD) plays a vital role in corporate networks by streamlining the management of users and devices.
+- It provides centralized control, making it much easier to oversee large networks compared to managing each device separately.
+
+## Room Objectives
+- Gain an understanding of what Active Directory is.
+- Learn about Active Directory Domains and their components.
+- Explore the concepts of forests and domain trusts.
+
+## Windows Domain
+- A Windows domain is a network structure where users and computers are managed centrally.
+- Active Directory serves as the central system for this management, and the server running AD services is known as a Domain Controller (DC).
+
+### Benefits of a Windows Domain
+1. **Centralized Identity Management**: Administrators can manage user accounts from a single console, simplifying oversight.
+2. **Security Policy Enforcement**: Network-wide security policies can be easily implemented through AD.
+
+### Real-World Scenario
+- In schools or universities, students often use one set of login credentials on multiple devices, thanks to AD’s centralized authentication and policy control.
+
+## Key Components of Active Directory
+### Primary Services
+- **Active Directory Domain Services (AD DS)**: The core service responsible for maintaining information about all network objects like users, groups, and devices.
+
+### Types of Objects in AD
+1. **Users**: Represent individuals or services needing network access, with assigned security permissions.
+2. **Machines**: Each computer has a machine account that acts as a security entity with specific access rights.
+3. **Security Groups**: Used to collectively manage permissions for multiple users, simplifying access control.
+
+### Organizational Units (OUs)
+- OUs are containers used to organize users and devices according to similar policy needs, often reflecting a company's internal structure.
+
+## Managing with Active Directory Users and Computers
+- The "Active Directory Users and Computers" tool is used to administer users, groups, and devices.
+- OUs can be created to mirror the organization's hierarchy, making policy application more efficient.
+
+### Default System Containers
+- **Builtin**: Contains default administrative groups.
+- **Computers**: The default location where new domain-joined machines are placed.
+- **Domain Controllers**: Stores all domain controllers.
+- **Users**: Houses default users and groups for the domain.
+
+## Delegating Administrative Tasks
+- Delegation allows specific users to manage particular OUs without requiring full Domain Admin rights, ideal for tasks like resetting passwords.
+
+## Group Policy Objects (GPOs)
+- GPOs are bundles of settings that can be applied to OUs for system configuration and security enforcement.
+- These policies are distributed across the network through the SYSVOL share on Domain Controllers.
+
+### Setting Up GPOs
+- GPOs can enforce rules such as disabling Control Panel access or setting mandatory screen lock timers.
+- Policies can be linked to specific OUs or the domain as a whole.
+
+## Authentication Mechanisms
+### Kerberos
+- The default authentication protocol, using ticket-based mechanisms for secure access.
+- Users first obtain a Ticket Granting Ticket (TGT) to request service-specific tickets.
+
+### NetNTLM
+- An older authentication protocol using a challenge-response method.
+- It avoids sending passwords over the network, enhancing security.
+
+## Understanding Trees and Forests
+### Trees
+- A tree consists of multiple domains sharing the same namespace, like thm.local with subdomains such as uk.thm.local and us.thm.local.
+
+### Forests
+- A forest groups multiple trees, which may have distinct namespaces, enabling more flexible management and access between domains.
+
+### Trust Relationships
+- Trusts allow users from one domain to access resources in another. These trusts can be one-way or two-way depending on the access requirements.
