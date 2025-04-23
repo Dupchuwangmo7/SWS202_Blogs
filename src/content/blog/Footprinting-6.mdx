@@ -1,0 +1,79 @@
+---
+title: "Footprinting- FTP"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+
+---
+
+### **FTP (File Transfer Protocol)**
+- **Layer**: Application layer of TCP/IP (same as HTTP, POP).
+- **Ports**:
+  - Control channel: TCP **port 21** (commands & status codes).
+  - Data channel: TCP **port 20** (file transmission).
+- **Modes**:
+  - **Active**: Client tells server which port to connect to (firewall may block this).
+  - **Passive**: Server tells client which port to connect to (better for firewalls).
+- **Security**: 
+  - Clear-text protocol → Can be sniffed.
+  - **Anonymous FTP** possible, but limited access for security.
+- **Common Status Codes**:
+  - 220: Service ready.
+  - 230: User logged in.
+
+---
+
+### **TFTP (Trivial File Transfer Protocol)**
+- **Simpler** than FTP.
+- **Protocol**: UDP (not TCP) → Unreliable transport but lightweight.
+- **Security**: 
+  - No authentication.
+  - Only uses global read/write file permissions.
+- **Common Commands**:
+  - `connect`, `get`, `put`, `quit`, `status`, `verbose`.
+- **Usage**: Only in secure, local networks.
+
+---
+
+### **vsFTPd (Very Secure FTP Daemon)**
+- **Install**: `sudo apt install vsftpd`
+- **Config file**: `/etc/vsftpd.conf`
+- **Important Settings**:
+  | Setting                  | Description |
+  |---------------------------|-------------|
+  | listen=NO                 | Run from inetd? |
+  | listen_ipv6=YES           | Listen on IPv6? |
+  | anonymous_enable=NO       | Allow anonymous login? |
+  | local_enable=YES          | Allow local users? |
+  | dirmessage_enable=YES     | Show directory messages? |
+  | xferlog_enable=YES        | Enable logging? |
+  | ssl_enable=NO             | SSL encryption? |
+  | secure_chroot_dir=...     | Path for chroot directory |
+  | rsa_cert_file, rsa_private_key_file | SSL certificates |
+- **/etc/ftpusers**: Users listed here are **denied** access to FTP.
+
+---
+
+### **Security and Dangerous Settings**
+- **Anonymous Upload Settings** (for public/internal sharing):
+  - `anon_upload_enable=YES`
+  - `anon_mkdir_write_enable=YES`
+  - `no_anon_password=YES`
+  - `anon_root=/home/username/ftp`
+- **Directory Listing Tweaks**:
+  - `hide_ids=YES`: Shows owner/group as "ftp" instead of real user.
+  - `ls_recurse_enable=YES`: `ls -R` command to recursively list directories.
+
+---
+
+### **Example Commands for Exploring FTP Server**
+- `ftp <server_ip>`: Connect to FTP server.
+- `status`: See FTP session settings.
+- `debug`: Show FTP commands/responses.
+- `trace`: Show packet flow.
+- `ls`, `ls -R`: List files, recursively list directories.
+
+---
+

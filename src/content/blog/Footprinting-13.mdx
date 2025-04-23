@@ -1,0 +1,80 @@
+---
+title: "Footprinting- MySQL"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on MySQL
+
+**Overview of MySQL**
+
+- **Definition**: MySQL is an open-source SQL relational database management system developed and supported by Oracle. It is designed for efficient data storage, retrieval, and management.
+- **Client-Server Architecture**: MySQL operates on a client-server model, consisting of a MySQL server (the database management system) and one or more MySQL clients that interact with the server.
+
+**MySQL Clients**
+
+- **Functionality**: MySQL clients can perform operations such as inserting, deleting, modifying, and retrieving data using SQL commands.
+- **Use Cases**: Commonly used in dynamic websites and applications, such as WordPress, which stores posts, usernames, and passwords in a MySQL database.
+
+**MySQL Databases**
+
+- **Applications**: MySQL is well-suited for applications requiring high performance and efficient data handling, often used in conjunction with Linux, Apache, and PHP (LAMP stack).
+- **Data Storage**: MySQL databases store various types of data, including user information, permissions, and sensitive data, which is typically encrypted before storage.
+
+**MySQL Commands**
+
+- **Command Execution**: MySQL translates commands into executable code, allowing for data manipulation and retrieval.
+- **Common SQL Commands**:
+  - `SHOW DATABASES;`: Lists all databases.
+  - `USE <database>;`: Selects a specific database.
+  - `SHOW TABLES;`: Lists all tables in the selected database.
+  - `SELECT * FROM <table>;`: Retrieves all records from a specified table.
+
+**Default Configuration**
+
+- **Configuration File**: MySQL's default configuration can be found in `/etc/mysql/mysql.conf.d/mysqld.cnf`.
+- **Example Configuration**:
+  ```bash
+  [client]
+  port = 3306
+  socket = /var/run/mysqld/mysqld.sock
+
+  [mysqld]
+  user = mysql
+  port = 3306
+  datadir = /var/lib/mysql
+  ```
+
+**Dangerous Settings**
+
+- **Security Risks**: Misconfigurations can lead to vulnerabilities, such as exposing sensitive data or allowing unauthorized access.
+- **Key Settings**:
+  - `user`: Defines which user the MySQL service runs as.
+  - `password`: Sets the password for the MySQL user.
+  - `admin_address`: Specifies the IP address for TCP/IP connections.
+
+**Footprinting the Service**
+
+- **Port Scanning**: MySQL typically runs on TCP port 3306. Use Nmap to scan for open MySQL ports and gather information.
+  ```bash
+  sudo nmap 10.129.14.128 -sV -sC -p3306
+  ```
+
+- **Example Nmap Output**: Displays open ports, service versions, and potential vulnerabilities.
+
+**Interacting with MySQL Server**
+
+- **Connecting to MySQL**:
+  ```bash
+  mysql -u <user> -p<password> -h <IP address>
+  ```
+
+- **Example Commands**:
+  - `SHOW DATABASES;`: Displays all databases.
+  - `USE <database>;`: Selects a database for further operations.
+  - `SHOW TABLES;`: Lists tables in the selected database.
+
+**Conclusion**
+
+- MySQL is a powerful relational database management system that requires careful configuration and management to ensure security and performance. Experimenting with a MySQL server setup can provide valuable insights into its functionality and best practices for securing databases.

@@ -1,0 +1,57 @@
+---
+title: "Footprinting- Enumeration Methodology"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Enumeration Methodology Notes
+
+## Core Concept
+Enumeration methodology provides a structured approach to penetration testing with flexibility to adapt to different environments. It's organized into 6 layers representing boundaries to overcome during testing.
+
+## Three Enumeration Levels
+- Infrastructure-based enumeration
+- Host-based enumeration 
+- OS-based enumeration
+
+## The Six Layers
+
+### Layer 1: Internet Presence
+- **Purpose**: Identify internet presence and externally accessible infrastructure
+- **Information Categories**: Domains, subdomains, vHosts, ASN, netblocks, IP addresses, cloud instances, security measures
+- **Goal**: Identify all possible target systems and interfaces for testing
+
+### Layer 2: Gateway
+- **Purpose**: Understand security protections in place
+- **Information Categories**: Firewalls, DMZ, IPS/IDS, EDR, proxies, NAC, network segmentation, VPN, Cloudflare
+- **Goal**: Understand what you're dealing with and what to watch for
+
+### Layer 3: Accessible Services
+- **Purpose**: Examine destinations for all services offered
+- **Information Categories**: Service type, functionality, configuration, port, version, interface
+- **Goal**: Understand system purpose and functionality to effectively communicate with and potentially exploit it
+
+### Layer 4: Processes
+- **Purpose**: Identify processes handling commands or functions
+- **Focus**: PID, processed data, tasks, source, destination
+- **Goal**: Understand relationships and dependencies between processes
+
+### Layer 5: Privileges
+- **Purpose**: Identify permissions and privileges of accessible services
+- **Information Categories**: Groups, users, permissions, restrictions, environment
+- **Goal**: Identify what actions are possible with discovered privileges
+
+### Layer 6: OS Setup
+- **Purpose**: Collect information about the operating system with internal access
+- **Information Categories**: OS type, patch level, network config, OS environment, configuration files, sensitive private files
+- **Goal**: Evaluate system management and identify sensitive internal information
+
+## Important Concepts
+- Methodology is not a step-by-step guide but a systematic framework
+- Not all discovered gaps/vulnerabilities will lead to successful exploitation
+- Time limitations in penetration testing mean 100% certainty of finding all vulnerabilities is impossible
+- Specific tools and commands are not part of the methodology itself but constitute a "cheat sheet" for reference
+
+## Notes for Internal Testing
+- The first and second layers may not fully apply to internal infrastructure like Active Directory

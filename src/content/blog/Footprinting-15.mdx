@@ -1,0 +1,103 @@
+---
+title: "Footprinting- Oracle TNS"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on Oracle TNS (Transparent Network Substrate)
+
+**Overview of Oracle TNS**
+
+- **Definition**: Oracle Transparent Network Substrate (TNS) is a communication protocol that facilitates communication between Oracle databases and applications over networks.
+- **Protocols Supported**: TNS supports various networking protocols, including IPX/SPX and TCP/IP, making it suitable for managing large databases in industries like healthcare, finance, and retail.
+- **Security Features**: TNS includes built-in encryption mechanisms to secure data transmission, supporting SSL/TLS encryption and IPv6.
+
+**Key Features of TNS**
+
+- **Name Resolution**: Resolves service names to network addresses.
+- **Connection Management**: Manages client connections to the database.
+- **Load Balancing**: Distributes client requests across multiple database instances.
+- **Security**: Provides encryption for client-server communication, enhancing data security.
+
+**Default Configuration**
+
+- **Listener Port**: By default, the TNS listener listens for incoming connections on TCP port **1521**.
+- **Configuration Files**:
+  - **tnsnames.ora**: Contains entries for database instances and services, specifying connection details.
+  - **listener.ora**: Defines properties and parameters for the listener process.
+
+**Example Configuration Files**
+
+- **tnsnames.ora**:
+  ```plaintext
+  ORCL =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.129.11.102)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orcl)
+    )
+  )
+  ```
+
+- **listener.ora**:
+  ```plaintext
+  SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = PDB1)
+      (ORACLE_HOME = C:\oracle\product\19.0.0\dbhome_1)
+      (GLOBAL_DBNAME = PDB1)
+    )
+  )
+  LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = orcl.inlanefreight.htb)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+    )
+  )
+  ```
+
+**Dangerous Settings**
+
+- **Common Misconfigurations**:
+  - **Using self-signed certificates**: Can be spoofed, leading to security vulnerabilities.
+  - **Weak or default credentials**: Such as the `sa` account, which may be left enabled and unchanged.
+
+**Footprinting the Service**
+
+- **Port Scanning**: Use Nmap to scan for the default Oracle TNS listener port (1521).
+  ```bash
+  sudo nmap -p1521 -sV 10.129.204.235 --open
+  ```
+
+- **SID Enumeration**: Use Nmap scripts to brute-force SIDs.
+  ```bash
+  sudo nmap -p1521 --script oracle-sid-brute 10.129.204.235
+  ```
+
+- **Using ODAT**: The Oracle Database Attacking Tool (ODAT) can be used to enumerate and exploit vulnerabilities in Oracle databases.
+  ```bash
+  ./odat.py all -s 10.129.204.235
+  ```
+
+**Connecting to the Database**
+
+- **Using SQL*Plus**: After obtaining valid credentials, connect to the Oracle database.
+  ```bash
+  sqlplus scott/tiger@10.129.204.235/XE
+  ```
+
+**Database Interaction**
+
+- **Common SQL Commands**:
+  - `SELECT table_name FROM all_tables;`: Lists all tables in the current database.
+  - `SELECT * FROM user_role_privs;`: Shows privileges of the current user.
+
+**Conclusion**
+
+- Oracle TNS is a robust protocol for managing Oracle databases, but it requires careful configuration to ensure security. Understanding its architecture, potential vulnerabilities, and best practices for securing Oracle databases is essential for database administrators and security professionals. Experimenting with a local Oracle TNS setup can provide valuable insights into its functionality and configuration options.

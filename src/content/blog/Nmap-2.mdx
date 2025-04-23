@@ -1,0 +1,100 @@
+---
+title: "Nmap- Intro to Namp"
+publishedAt: 2025-04-10
+summary: ""
+tags: "Nmap"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Introduction to Nmap
+
+- **Definition**: Nmap (Network Mapper) is an open-source network analysis and security auditing tool designed to scan networks, identify hosts, and determine available services and applications.
+- **Languages**: Written in C, C++, Python, and Lua.
+- **Capabilities**:
+    - Identify operating systems and versions of hosts.
+    - Detect packet filters, firewalls, and intrusion detection systems (IDS).
+
+### Use Cases
+
+Nmap is widely used by network administrators and IT security specialists for:
+
+- Auditing network security.
+- Simulating penetration tests.
+- Checking firewall and IDS configurations.
+- Mapping networks and analyzing responses.
+- Identifying open ports.
+- Conducting vulnerability assessments.
+
+### Nmap Architecture
+
+Nmap can be categorized into several scanning techniques:
+
+1. **Host Discovery**: Identifying active devices on the network.
+2. **Port Scanning**: Checking which ports are open on a target.
+3. **Service Enumeration and Detection**: Identifying services running on open ports, including their versions.
+4. **OS Detection**: Determining the operating system of the target.
+5. **Nmap Scripting Engine (NSE)**: Scriptable interaction with target services for advanced scanning.
+
+### Syntax
+
+The basic syntax for using Nmap is:
+
+```bash
+nmap <scan types> <options> <target>
+
+```
+
+### Scan Techniques
+
+Nmap offers various scanning techniques, including:
+
+- **TCP Scans**:
+    - `sS`: TCP SYN scan (default and popular method).
+    - `sT`: TCP Connect scan.
+    - `sA`: TCP ACK scan.
+    - `sW`: TCP Window scan.
+    - `sM`: TCP Maimon scan.
+- **UDP Scan**: `sU`
+- **TCP Null, FIN, and Xmas Scans**: `sN`, `sF`, `sX`
+- **Idle Scan**: `sI <zombie host[:probeport]>`
+- **SCTP Scans**: `sY` (INIT) and `sZ` (COOKIE-ECHO)
+- **IP Protocol Scan**: `sO`
+- **FTP Bounce Scan**: `b <FTP relay host>`
+
+### Example of a TCP SYN Scan
+
+The TCP SYN scan (`-sS`) is a popular method that allows scanning thousands of ports per second without completing the TCP handshake. Here’s an example command:
+
+```bash
+sudo nmap -sS localhost
+
+```
+
+**Example Output**:
+
+```
+Starting Nmap 7.80 ( <https://nmap.org> ) at 2020-06-11 22:50 UTC
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000010s latency).
+Not shown: 996 closed ports
+PORT      STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+5432/tcp open  postgresql
+5901/tcp open  vnc-1
+Nmap done: 1 IP address (1 host up) scanned in 0.18 seconds
+
+```
+
+- **Interpretation**: The output shows four open TCP ports (22, 80, 5432, and 5901) along with their respective services.
+
+### Conclusion
+
+Nmap is a powerful tool for network analysis and security auditing, providing a wide range of scanning techniques to gather information about hosts and services. Understanding its capabilities and how to effectively use its various scan types is essential for network administrators and security professionals.

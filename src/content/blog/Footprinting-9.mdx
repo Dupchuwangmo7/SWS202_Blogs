@@ -1,0 +1,120 @@
+---
+title: "Footprinting- DNS"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on DNS (Domain Name System)
+
+**Overview of DNS**
+
+- **Definition**: The Domain Name System (DNS) is a critical component of the Internet that translates domain names (e.g., academy.hackthebox.com) into IP addresses, allowing users to access web servers.
+- **Decentralized System**: DNS operates without a central database, distributing information across thousands of name servers globally.
+
+**Types of DNS Servers**
+
+1. **DNS Root Server**: 
+   - Responsible for top-level domains (TLDs).
+   - Acts as a central interface between users and content on the Internet.
+   - There are 13 root servers worldwide, coordinated by ICANN.
+
+2. **Authoritative Name Server**: 
+   - Holds authority for a specific zone and provides binding answers to queries within its area of responsibility.
+
+3. **Non-authoritative Name Server**: 
+   - Collects information on specific DNS zones through recursive or iterative queries but does not hold authority.
+
+4. **Caching DNS Server**: 
+   - Caches information from other name servers for a specified duration, improving response times for repeated queries.
+
+5. **Forwarding Server**: 
+   - Forwards DNS queries to another DNS server without resolving them locally.
+
+6. **Resolver**: 
+   - Performs name resolution locally on a computer or router.
+
+**DNS Security**
+
+- **Unencrypted Protocol**: DNS queries are primarily unencrypted, posing privacy risks. Solutions like DNS over TLS (DoT), DNS over HTTPS (DoH), and DNSCrypt provide encryption for DNS traffic.
+
+**DNS Records**
+
+Different DNS records serve various functions, including:
+
+- **A**: Returns an IPv4 address for the requested domain.
+- **AAAA**: Returns an IPv6 address for the requested domain.
+- **MX**: Specifies the mail servers responsible for the domain.
+- **NS**: Lists the DNS servers (nameservers) for the domain.
+- **TXT**: Contains various information, such as SPF and DMARC entries for email validation.
+- **CNAME**: Serves as an alias for another domain name.
+- **PTR**: Performs reverse lookups, converting IP addresses into domain names.
+- **SOA**: Provides information about the DNS zone and the administrative contact's email address.
+
+**Default Configuration**
+
+- **Configuration Files**: DNS servers typically use three types of configuration files:
+  1. Local DNS configuration files
+  2. Zone files
+  3. Reverse name resolution files
+
+- **BIND9**: A commonly used DNS server on Linux. Key configuration files include:
+  - `named.conf.local`: Defines zones.
+  - `named.conf.options`: General settings for the DNS server.
+
+**Zone Files**
+
+- **Structure**: Zone files describe a DNS zone using the BIND file format, containing records like SOA, NS, MX, and A records.
+- **Example Zone File**:
+  ```bash
+  $ORIGIN domain.com
+  $TTL 86400
+  @ IN SOA dns1.domain.com. hostmaster.domain.com. (
+      2001062501 ; serial
+      21600 ; refresh
+      3600 ; retry
+      604800 ; expire
+      86400 ) ; minimum TTL
+  IN NS ns1.domain.com.
+  IN A 10.129.14.5
+  ```
+
+**Reverse Name Resolution**
+
+- **Reverse Lookup Files**: Map IP addresses to hostnames using PTR records.
+- **Example Reverse File**:
+  ```bash
+  $ORIGIN 14.129.10.in-addr.arpa
+  @ IN SOA dns1.domain.com. hostmaster.domain.com. (
+      2001062501 ; serial
+      21600 ; refresh
+      3600 ; retry
+      604800 ; expire
+      86400 ) ; minimum TTL
+  ```
+
+**Security Considerations**
+
+- **Vulnerabilities**: DNS servers, especially BIND9, can be vulnerable to various attacks. Misconfigurations can lead to security risks.
+- **Dangerous Settings**:
+  - `allow-query`: Controls which hosts can send requests.
+  - `allow-recursion`: Controls which hosts can make recursive requests.
+  - `allow-transfer`: Controls which hosts can receive zone transfers.
+
+**Footprinting the Service**
+
+- **Querying DNS Servers**: Use commands like `dig` to query DNS records and gather information about the DNS server.
+- **Example Commands**:
+  - **NS Query**: 
+    ```bash
+    dig ns inlanefreight.htb @10.129.14.128
+    ```
+  - **Version Query**: 
+    ```bash
+    dig CH TXT version.bind 10.129.120.85
+    ```
+  - **ANY Query**: 
+    ```bash
+    dig any inlanefreight.htb @10.129.14.128
+    ```
+

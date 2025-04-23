@@ -1,0 +1,107 @@
+---
+title: "Footprinting- SMTP"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on SMTP (Simple Mail Transfer Protocol)
+
+**Overview of SMTP**
+
+- **Definition**: SMTP is a protocol used for sending emails across an IP network. It can operate between an email client and an outgoing mail server or between two SMTP servers.
+- **Client-Server Model**: SMTP functions as a client-server protocol, allowing communication between clients and servers, as well as between SMTP servers.
+
+**Ports Used by SMTP**
+
+- **Default Port**: SMTP servers typically accept connections on **port 25**.
+- **Alternative Ports**:
+  - **TCP Port 587**: Used for sending mail from authenticated users/servers, often with STARTTLS for encryption.
+  - **TCP Port 465**: Sometimes used for encrypted connections.
+
+**Connection and Authentication**
+
+- **Connection Process**: 
+  - The client authenticates with a username and password before sending emails.
+  - The client sends sender and recipient addresses, email content, and other parameters.
+  - After transmission, the connection is terminated.
+
+- **Encryption**: SMTP operates unencrypted by default, transmitting data in plaintext. To secure data, it is often used with SSL/TLS encryption.
+
+**SMTP Functionality**
+
+- **Spam Prevention**: SMTP servers implement authentication mechanisms to allow only authorized users to send emails, often using ESMTP with SMTP-Auth.
+- **Mail Transfer Process**:
+  - **Mail User Agent (MUA)**: The client that sends the email.
+  - **Mail Transfer Agent (MTA)**: Software that sends and receives emails, checking for size and spam.
+  - **Mail Submission Agent (MSA)**: Validates the email's origin, also known as a relay server.
+  - **Mail Delivery Agent (MDA)**: Transfers the email to the recipient's mailbox.
+
+**Disadvantages of SMTP**
+
+1. **Delivery Confirmation**: SMTP does not provide a usable delivery confirmation; it typically returns only error messages.
+2. **Lack of Authentication**: Users are not authenticated upon connection, leading to potential misuse, such as open SMTP relays being exploited for spam (mail spoofing).
+
+**Security Techniques**
+
+- **DomainKeys (DKIM)** and **Sender Policy Framework (SPF)** are used to validate email traffic and protect against spam.
+- **Extended SMTP (ESMTP)**: An extension of SMTP that supports TLS for secure connections.
+
+**Default Configuration**
+
+- **Configuration File**: Commonly found in `/etc/postfix/main.cf`.
+- **Example Configuration**:
+  ```bash
+  smtpd_banner = ESMTP Server
+  myhostname = mail1.inlanefreight.htb
+  mynetworks = 127.0.0.0/8 10.129.0.0/16
+  inet_protocols = ipv4
+  ```
+
+**SMTP Commands**
+
+- **AUTH PLAIN**: Authenticates the client.
+- **HELO/EHLO**: Starts the session.
+- **MAIL FROM**: Specifies the sender's email address.
+- **RCPT TO**: Specifies the recipient's email address.
+- **DATA**: Initiates email transmission.
+- **QUIT**: Terminates the session.
+
+**Interacting with SMTP Server**
+
+- **Using Telnet**: 
+  ```bash
+  telnet 10.129.14.128 25
+  ```
+
+- **Example Session**:
+  ```bash
+  EHLO inlanefreight.htb
+  MAIL FROM: <cry0l1t3@inlanefreight.htb>
+  RCPT TO: <mrb3n@inlanefreight.htb>
+  DATA
+  From: <cry0l1t3@inlanefreight.htb>
+  To: <mrb3n@inlanefreight.htb>
+  Subject: Test Email
+  ```
+
+**Dangerous Settings**
+
+- **Open Relay Configuration**: 
+  ```bash
+  mynetworks = 0.0.0.0/0
+  ```
+  - This allows any IP address to send emails through the server, which can be exploited for spam.
+
+**Footprinting the Service**
+
+- **Nmap Scanning**: Use Nmap to identify SMTP server capabilities and check for open relay configurations.
+  ```bash
+  sudo nmap 10.129.14.128 -p25 --script smtp-open-relay -v
+  ```
+
+- **Example Output**: Indicates whether the server is an open relay and lists tests performed.
+
+**Conclusion**
+
+- SMTP is a fundamental protocol for email transmission, but it requires careful configuration to prevent misuse and ensure security. Understanding its operation and potential vulnerabilities is crucial for maintaining a secure email environment.

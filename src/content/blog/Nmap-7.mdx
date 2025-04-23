@@ -1,0 +1,206 @@
+---
+title: "Nmap- Nmap Scripting Engine"
+publishedAt: 2025-04-10
+summary: ""
+tags: "Nmap"
+---
+
+# Nmap Scripting Engine (NSE) Guide
+
+## Overview
+
+The Nmap Scripting Engine (NSE) is a powerful extension of Nmap that allows security professionals to automate network reconnaissance tasks using Lua scripts. NSE enables interaction with various network services, vulnerability assessment, and detailed information gathering that goes beyond basic port scanning.
+
+## Script Categories
+
+NSE scripts are organized into 14 distinct categories, each serving a specific purpose:
+
+| Category | Description |
+| --- | --- |
+| **auth** | Determines authentication credentials or methods used by services |
+| **broadcast** | Discovers hosts through network broadcasting; discovered hosts can be added to ongoing scans |
+| **brute** | Performs brute-force authentication attacks against services |
+| **default** | Standard scripts executed with the `-sC` option |
+| **discovery** | Evaluates and gathers information about accessible services |
+| **dos** | Tests services for denial of service vulnerabilities (used cautiously as it may harm services) |
+| **exploit** | Attempts to exploit known vulnerabilities on scanned ports |
+| **external** | Utilizes external services for further processing and analysis |
+| **fuzzer** | Identifies vulnerabilities through unexpected packet handling (can be time-consuming) |
+| **intrusive** | Performs tests that could potentially negatively affect target systems |
+| **malware** | Checks if the target system is infected with malware |
+| **safe** | Non-intrusive, non-destructive scripts for defensive scanning |
+| **version** | Extends service detection capabilities |
+| **vuln** | Specifically identifies and reports on vulnerabilities |
+
+## Usage Methods
+
+There are several ways to utilize NSE scripts in Nmap scans:
+
+### Default Scripts
+
+```bash
+sudo nmap <target> -sC
+
+```
+
+### Specific Script Category
+
+```bash
+sudo nmap <target> --script <category>
+
+```
+
+### Defined Scripts
+
+```bash
+sudo nmap <target> --script <script-name>,<script-name>,...
+
+```
+
+### Aggressive Scan
+
+```bash
+sudo nmap <target> -A
+
+```
+
+This combines service detection (`-sV`), OS detection (`-O`), traceroute (`--traceroute`), and default NSE scripts (`-sC`).
+
+## Practical Examples
+
+### Example 1: Banner Grabbing and SMTP Commands
+
+```bash
+sudo nmap 10.129.2.28 -p 25 --script banner,smtp-commands
+
+```
+
+**Output:**
+
+```
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-06-16 23:21 CEST
+Nmap scan report for 10.129.2.28
+Host is up (0.050s latency).
+
+PORT   STATE SERVICE
+25/tcp open  smtp
+|_banner: 220 inlane ESMTP Postfix (Ubuntu)
+|_smtp-commands: inlane, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, ENHANCEDSTATUSCODES, 8BITMIME
+MAC Address: DE:AD:00:00:BE:EF (Intel Corporate)
+
+```
+
+This scan reveals:
+
+- The target is running Postfix SMTP server on Ubuntu
+- Available SMTP commands that could be used for further enumeration
+
+### Example 2: Aggressive Scan of Web Server
+
+```bash
+sudo nmap 10.129.2.28 -p 80 -A
+
+```
+
+**Output:**
+
+```
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-06-17 01:38 CEST
+Nmap scan report for 10.129.2.28
+Host is up (0.012s latency).
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-generator: WordPress 5.3.4
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: blog.inlanefreight.com
+MAC Address: DE:AD:00:00:BE:EF (Intel Corporate)
+
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 2.6.32 (96%), Linux 3.2 - 4.9 (96%), Linux 2.6.32 - 3.10 (96%)
+[...]
+
+Network Distance: 1 hop
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   11.91 ms 10.129.2.28
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.36 seconds
+
+```
+
+This scan reveals:
+
+- Apache 2.4.29 web server running on Ubuntu
+- WordPress 5.3.4 is installed
+- The website title is "blog.inlanefreight.com"
+- High probability (96%) that the target is running Linux
+
+### Example 3: Vulnerability Assessment
+
+```bash
+sudo nmap 10.129.2.28 -p 80 -sV --script vuln
+
+```
+
+**Output:**
+
+```
+Nmap scan report for 10.129.2.28
+Host is up (0.036s latency).
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-enum:
+| /wp-login.php: Possible admin folder
+| /readme.html: Wordpress version: 2
+| /: WordPress version: 5.3.4
+| /wp-includes/images/rss.png: Wordpress version 2.2 found.
+| /wp-includes/js/jquery/suggest.js: Wordpress version 2.5 found.
+| /wp-includes/images/blank.gif: Wordpress version 2.6 found.
+| /wp-includes/js/comment-reply.js: Wordpress version 2.7 found.
+| /wp-login.php: Wordpress login page.
+| /wp-admin/upgrade.php: Wordpress login page.
+|_ /readme.html: Interesting, a readme.
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+| http-wordpress-users:
+| Username found: admin
+|_Search stopped at ID #25. Increase the upper limit if necessary with 'http-wordpress-users.limit'
+| vulners:
+| cpe:/a:apache:http_server:2.4.29:
+| CVE-2019-0211   7.2   https://vulners.com/cve/CVE-2019-0211
+| CVE-2018-1312   6.8   https://vulners.com/cve/CVE-2018-1312
+| CVE-2017-15715  6.8   https://vulners.com/cve/CVE-2017-15715
+[SNIP]
+
+```
+
+This vulnerability assessment reveals:
+
+- WordPress installation with version 5.3.4
+- Detection of admin login page and username "admin"
+- Multiple WordPress files that indicate the version
+- Apache server vulnerabilities with CVE references and severity scores
+
+## Benefits of NSE
+
+1. **Automation**: Automates complex network reconnaissance tasks
+2. **Customization**: Scripts can be customized or new ones created for specific needs
+3. **Comprehensive Analysis**: Provides detailed information about services, vulnerabilities, and system configurations
+4. **Efficiency**: Combines multiple security tools into a single framework
+5. **Integration**: Results can be used as input for further testing or incorporated into reports
+
+## Best Practices
+
+1. **Caution with Intrusive Scripts**: Be careful when using scripts from the dos, intrusive, or brute categories as they may impact target systems
+2. **Target Permission**: Always ensure you have proper authorization before scanning any systems
+3. **Scan Timing**: Use appropriate timing options to avoid overwhelming target networks
+4. **Script Selection**: Choose specific scripts rather than broad categories when possible to minimize scan impact
+5. **Output Management**: Save scan results using Nmap's output options for documentation and further analysis
+
+## Conclusion
+
+The Nmap Scripting Engine significantly extends Nmap's capabilities beyond simple port scanning, making it an essential tool for comprehensive network security assessments. By leveraging NSE's extensive script library, security professionals can gather detailed information about network services, identify vulnerabilities, and conduct thorough security evaluations efficiently.

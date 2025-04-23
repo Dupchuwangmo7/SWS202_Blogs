@@ -1,0 +1,115 @@
+---
+title: "Footprinting- Linux Remote Management Protocols"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on Linux Remote Management Protocols
+
+## Overview
+Linux distributions offer various methods for remote server management, allowing system administrators to troubleshoot and manage servers without physical access. This is particularly useful for resolving issues that arise when employees are working remotely.
+
+## Key Remote Management Protocols
+
+### SSH (Secure Shell)
+- **Purpose**: Establishes an encrypted connection between two computers over an insecure network.
+- **Default Port**: TCP 22.
+- **Advantages**:
+  - Runs on all major operating systems (Linux, macOS, Windows).
+  - Supports multiple authentication methods:
+    1. Password authentication
+    2. Public-key authentication
+    3. Host-based authentication
+    4. Keyboard authentication
+    5. Challenge-response authentication
+    6. GSSAPI authentication
+- **Public Key Authentication**:
+  - Involves a public/private key pair for secure authentication.
+  - The private key is stored securely on the client, while the public key is stored on the server.
+  - Users enter a passphrase to access the private key, allowing for easier access to multiple servers during a session.
+
+#### Default Configuration
+- The `sshd_config` file contains various settings, with many commented out by default.
+- Example configuration:
+  ```bash
+  K4y0x13@htb[/htb]$ cat /etc/ssh/sshd_config | grep -v "#" | sed -r '/^\s*$/d'
+  Include /etc/ssh/sshd_config.d/*.conf
+  ChallengeResponseAuthentication no
+  UsePAM yes
+  X11Forwarding yes
+  PrintMotd no
+  AcceptEnv LANG LC_*
+  Subsystem sftp /usr/lib/openssh/sftp-server
+  ```
+
+#### Dangerous Settings
+- **PasswordAuthentication yes**: Allows password-based authentication, making it vulnerable to brute-force attacks.
+- **PermitEmptyPasswords yes**: Allows empty passwords.
+- **PermitRootLogin yes**: Allows root user login.
+- **Protocol 1**: Uses an outdated version of encryption.
+- **X11Forwarding yes**: Allows GUI applications to be forwarded.
+
+### Rsync
+- **Purpose**: Efficiently copies files locally and remotely, using a delta-transfer algorithm to minimize data transfer.
+- **Default Port**: TCP 873.
+- **Usage**: Can be configured to use SSH for secure file transfers.
+- **Vulnerabilities**: Can be abused to list contents of shared folders and retrieve files, sometimes without authentication.
+
+#### Scanning for Rsync
+```bash
+K4y0x13@htb[/htb]$ sudo nmap -sV -p 873 127.0.0.1
+```
+
+### R-Services
+- **Overview**: A suite of services for remote access between Unix hosts, now largely replaced by SSH due to security flaws.
+- **Common Commands**:
+  - `rcp`: Remote copy.
+  - `rsh`: Remote shell.
+  - `rexec`: Remote execution.
+  - `rlogin`: Remote login.
+- **Ports**: 512, 513, 514.
+
+#### Dangerous Settings
+- **No Authentication**: R-services rely on trusted entries in `/etc/hosts.equiv` and `.rhosts`, allowing unauthorized access if misconfigured.
+
+### NFS (Network File System)
+- **Purpose**: Allows access to file systems over a network as if they were local, primarily used between Linux and Unix systems.
+- **Versions**:
+  - **NFSv2**: Operated over UDP.
+  - **NFSv3**: Introduced features like variable file size and better error reporting.
+  - **NFSv4**: Added Kerberos support, works through firewalls, and uses a single port (2049).
+
+#### Default Configuration
+- Configured in `/etc/exports`, specifying which directories are shared and their permissions.
+- Example entry:
+  ```bash
+  /mnt/nfs 10.129.14.0/24(sync,no_subtree_check)
+  ```
+
+#### Dangerous Settings
+- **rw**: Read and write permissions.
+- **no_root_squash**: Allows root access to files created by root on the NFS share.
+
+### DNS (Domain Name System)
+- **Purpose**: Resolves domain names to IP addresses, functioning as a distributed database across multiple name servers.
+- **Types of DNS Servers**:
+  - DNS root server
+  - Authoritative name server
+  - Non-authoritative name server
+  - Caching server
+  - Forwarding server
+  - Resolver
+
+#### Default Configuration
+- Configured in files like `named.conf` and zone files.
+- Example zone file entry:
+  ```bash
+  zone "domain.com" {
+      type master;
+      file "/etc/bind/db.domain.com";
+  };
+  ```
+
+#### Dangerous Settings
+- **allow-query**:

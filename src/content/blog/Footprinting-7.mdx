@@ -1,0 +1,98 @@
+---
+title: "Footprinting- SMB"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+# Notes on SMB and Samba
+
+**Overview of SMB**
+
+- **Definition**: Server Message Block (SMB) is a client-server protocol for accessing files, directories, and network resources (e.g., printers).
+- **History**: Initially part of OS/2's LAN Manager, SMB is widely used in Windows environments and supports backward compatibility.
+- **Cross-Platform**: Samba allows SMB usage in Linux/Unix, enabling cross-platform communication.
+
+**SMB Protocol Functionality**
+
+- **Client-Server Communication**: Clients access shared resources on the network through an SMB server.
+- **Connection Establishment**: Utilizes TCP for a three-way handshake before data transport.
+- **Access Control**: Managed through Access Control Lists (ACLs) for fine-grained permissions.
+
+**Samba Implementation**
+
+- **CIFS**: Samba implements the Common Internet File System (CIFS), a dialect of SMB.
+- **Port Usage**: 
+  - Older NetBIOS services use ports 137, 138, and 139.
+  - CIFS operates exclusively over TCP port 445.
+- **SMB Versions**:
+  - **CIFS**: Windows NT 4.0
+  - **SMB 1.0**: Windows 2000
+  - **SMB 2.0**: Windows Vista, Server 2008
+  - **SMB 2.1**: Windows 7, Server 2008 R2
+  - **SMB 3.0**: Windows 8, Server 2012
+  - **SMB 3.1.1**: Windows 10, Server 2016
+
+**Samba Configuration**
+
+- **Default Configuration**: Settings are defined in `/etc/samba/smb.conf`.
+- **Global Settings**: Affect all shares; can be overridden by individual share settings.
+- **Key Settings**:
+  - `workgroup`: Defines the workgroup name.
+  - `path`: Directory access for users.
+  - `guest ok`: Allows anonymous access.
+  - `read only`: Restricts file modifications.
+
+**Security Considerations**
+
+- **Dangerous Settings**: 
+  - `browseable = yes`: Allows users to list shares, increasing risk.
+  - `guest ok = yes`: Enables access without authentication.
+  - `create mask = 0777`: Grants full permissions to new files.
+
+**Service Management**
+
+- **Restarting Samba**: Use `sudo systemctl restart smbd` after configuration changes.
+
+**Enumeration Techniques**
+
+- **Using `smbclient`**: 
+  - List shares: `smbclient -N -L //IP_ADDRESS`
+  - Access a share: `smbclient //IP_ADDRESS/share_name`
+- **Using `smbstatus`**: Check active connections and share usage.
+
+**Nmap Scanning**
+
+- **Nmap Command**: `sudo nmap -sV -sC -p139,445 IP_ADDRESS`
+- **Output**: Displays open ports and SMB version information.
+
+**RPC Client Usage**
+
+- **Using `rpcclient`**: 
+  - Connect anonymously: `rpcclient -U "" IP_ADDRESS`
+  - Useful commands:
+    - `srvinfo`: Get server info.
+    - `enumdomains`: List domains.
+    - `netshareenumall`: List all shares.
+
+**User  and Group Enumeration**
+
+- **User  Enumeration**: 
+  - `enumdomusers`: Lists domain users.
+  - `queryuser <RID>`: Retrieves user details.
+- **Group Information**: 
+  - `querygroup <RID>`: Gets group details.
+
+**Brute Forcing RIDs**
+
+- **Bash Loop**: Automate querying user RIDs to gather information.
+
+**Alternative Tools**
+
+- **Impacket**: Use `samrdump.py` for user enumeration.
+- **SMBMap**: Enumerate shares and permissions.
+- **CrackMapExec**: Simplifies SMB enumeration.
+- **Enum4Linux-ng**: Automates many queries for SMB enumeration.
+
+**Conclusion**
+
+- **Manual Verification**: Always verify results from automated tools to ensure accuracy and completeness.

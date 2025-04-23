@@ -1,0 +1,54 @@
+---
+title: "Footprinting- Domain Information"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Domain Information Notes
+
+## Core Concepts
+Domain information gathering is essential for penetration testing - it focuses on understanding a company's entire internet presence, not just subdomains.
+
+## Information Gathering Approach
+- **Passive reconnaissance**: Gather data without direct scanning to remain undetected
+- Understand company's services to determine technical requirements and likely infrastructure
+- Use the enumeration principles: observe what you see and what you don't see
+
+## Key Information Sources
+
+### 1. SSL Certificates
+- Examine certificates from main websites which often include multiple subdomains
+- Use Certificate Transparency logs via `crt.sh` to find additional subdomains
+
+### 2. Identifying Internet-Accessible Hosts
+- Filter discovered subdomains to find company-hosted servers (not third-party)
+- Generate IP address lists for further investigation
+
+### 3. Shodan Intelligence
+- Search for discovered IPs to find:
+  - Open ports and services
+  - Geographic location
+  - Organization information
+  - Security configurations (SSL versions, etc.)
+
+### 4. DNS Records Analysis
+- **A records**: Direct hostname to IP mapping
+- **MX records**: Mail server information
+- **NS records**: Nameserver information (can reveal hosting provider)
+- **TXT records**: Often reveal third-party services and verification information
+
+## Interpreting Third-Party Services
+Information from DNS records can reveal company infrastructure:
+- Atlassian: Software development and collaboration tools
+- Google/Gmail: Email management, potential GDrive resources
+- LogMeIn: Centralized remote access management
+- Mailgun: Email APIs and SMTP services (potential API vulnerabilities)
+- Outlook/Office 365: Document management, potential OneDrive/Azure storage
+- INWX: Domain registrar/hosting provider
+
+## Best Practices
+- Document all discovered subdomains, IPs, and services
+- Note third-party providers for later investigation
+- Use multiple information sources to build a comprehensive picture
+- Identify which hosts are in-scope for testing (avoid third-party services without permission)

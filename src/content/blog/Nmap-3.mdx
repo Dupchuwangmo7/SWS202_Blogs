@@ -1,0 +1,139 @@
+---
+title: "Nmap- Host Discovery"
+publishedAt: 2025-04-10
+summary: ""
+tags: "Nmap"
+---
+
+import { Image } from "astro:assets";
+import Tweet from "astro-tweet";
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import ImageGrid from "../../components/mdx/ImageGrid.astro";
+import Caption from "../../components/mdx/Caption.astro";
+import Table from "../../components/mdx/Table.astro"; 
+import Callout from "../../components/mdx/Callout.astro";
+
+### Purpose of Host Discovery
+
+- **Objective**: To identify which systems are online and available for interaction during an internal penetration test.
+- **Importance**: Understanding the active hosts on a network is crucial for planning further testing and assessments.
+
+### Nmap Host Discovery Options
+
+Nmap provides various options to determine if a target is alive. The most effective method is using ICMP echo requests.
+
+### Storing Scan Results
+
+- **Recommendation**: Always store scan results for comparison, documentation, and reporting purposes. Different tools may yield different results.
+
+### Scanning a Network Range
+
+To scan an entire network range, use the following command:
+
+```bash
+sudo nmap 10.129.2.0/24 -sn -oA tnet | grep for | cut -d" " -f5
+
+```
+
+- **Options**:
+    - `10.129.2.0/24`: Target network range.
+    - `sn`: Disables port scanning (ping scan only).
+    - `oA tnet`: Stores results in all formats starting with the name 'tnet'.
+
+**Example Output**:
+
+```
+10.129.2.4
+10.129.2.10
+10.129.2.11
+10.129.2.18
+10.129.2.19
+10.129.2.20
+10.129.2.28
+
+```
+
+### Scanning an IP List
+
+If provided with a list of IPs, you can scan them using:
+
+```bash
+sudo nmap -sn -oA tnet -iL hosts.lst | grep for | cut -d" " -f5
+
+```
+
+- **Options**:
+    - `iL hosts.lst`: Reads hosts from the specified list.
+
+**Example Output**:
+
+```
+10.129.2.18
+10.129.2.19
+10.129.2.20
+
+```
+
+### Scanning Multiple IPs
+
+To scan specific IP addresses:
+
+```bash
+sudo nmap -sn -oA tnet 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5
+
+```
+
+To scan a range of IPs:
+
+```bash
+sudo nmap -sn -oA tnet 10.129.2.18-20 | grep for | cut -d" " -f5
+
+```
+
+### Scanning a Single IP
+
+To check if a single host is alive:
+
+```bash
+sudo nmap 10.129.2.18 -sn -oA host
+
+```
+
+- **Output**: Confirms if the host is up and provides the MAC address.
+
+### ICMP Echo Requests
+
+- By default, Nmap uses ARP pings before sending ICMP echo requests. To ensure ICMP echo requests are sent, use:
+
+```bash
+sudo nmap 10.129.2.18 -sn -oA host -PE --packet-trace
+
+```
+
+- **Options**:
+    - `PE`: Performs the ping scan using ICMP Echo requests.
+    - `-packet-trace`: Displays all packets sent and received.
+
+### Disabling ARP Pings
+
+To disable ARP requests and only use ICMP echo requests:
+
+```bash
+sudo nmap 10.129.2.18 -sn -oA host -PE --packet-trace --disable-arp-ping
+
+```
+
+### Understanding Host Status
+
+To see why Nmap marked a host as "alive":
+
+```bash
+sudo nmap 10.129.2.18 -sn -oA host -PE --reason
+
+```
+
+- **Output**: Displays the reason for the host being marked as up (e.g., received ARP response).
+
+### Conclusion
+
+Host discovery is a critical first step in network penetration testing. Nmap provides various options to effectively identify active hosts on a network, using techniques such as ICMP echo requests and ARP pings. Understanding how to utilize these options and interpret the results is essential for successful network assessments.

@@ -1,0 +1,51 @@
+---
+title: "Footprinting- Cloud Resources"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Cloud Resources Notes
+
+## Core Concept
+Cloud services (AWS, GCP, Azure) have become essential components of modern company infrastructure, but misconfigured resources can create security vulnerabilities despite the provider's secure infrastructure.
+
+## Common Cloud Storage Vulnerabilities
+- Improperly configured S3 buckets (AWS), blobs (Azure), or cloud storage (GCP) may allow unauthenticated access
+- DNS records often reveal cloud storage used for administrative purposes
+
+## Discovery Methods
+
+### DNS Analysis
+- Cloud storage endpoints often appear in DNS records for administrative convenience
+- Example found during enumeration: `s3-website-us-west-2.amazonaws.com`
+
+### Google Dorking
+- Using advanced search operators like `inurl:` and `intext:` to discover cloud resources
+- Search can reveal documents (PDFs, text files, presentations, code) stored in cloud storage
+
+### Source Code Analysis
+- Company websites often reference cloud storage in source code
+- Cloud resources commonly host images, JavaScript, CSS, and other web assets
+
+### Third-Party Intelligence Tools
+- **Domain.glass**: Provides information about infrastructure and security measures
+- **GrayHatWarfare**: Specialized search for AWS, Azure, and GCP storage with filtering capabilities
+  - Can identify publicly accessible files by format
+  - Helps discover content after initial identification
+
+### Search Strategies
+- Use company name abbreviations which are commonly used in IT infrastructure naming
+- Search for specific file types that might contain sensitive information
+- Look for leaked credentials, especially SSH keys
+
+## Security Risks
+- Publicly accessible cloud storage may contain sensitive documents
+- Employee mistakes under pressure can lead to serious security breaches
+- SSH private keys exposed in public repositories or storage can grant unauthorized system access
+
+## Best Practices for Testing
+- Document all discovered cloud resources
+- Check for publicly accessible sensitive files
+- Verify if authentication is properly implemented
+- Test for common misconfigurations in cloud services

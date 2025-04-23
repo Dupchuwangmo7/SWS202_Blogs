@@ -1,0 +1,139 @@
+---
+title: "Nmap- Host and Port Scanning"
+publishedAt: 2025-04-10
+summary: ""
+tags: "Nmap"
+---
+
+### Importance of Understanding Scanning
+
+- **Objective**: To gather detailed information about a target system, including:
+    - Open ports and their services
+    - Service versions
+    - Information provided by the services
+    - Operating system details
+
+### Port States
+
+Nmap can report six different states for scanned ports:
+
+| State | Description |
+| --- | --- |
+| **open** | Connection to the scanned port has been established (TCP, UDP, SCTP). |
+| **closed** | The port is closed; an RST flag is received in response. |
+| **filtered** | Nmap cannot determine if the port is open or closed due to no response or an error code. |
+| **unfiltered** | The port is accessible, but its state (open/closed) cannot be determined (only during TCP-ACK scans). |
+| **open | filtered** |
+| **closed | filtered** |
+
+### Discovering Open TCP Ports
+
+- **Default Behavior**: Nmap scans the top 1000 TCP ports using a SYN scan (`sS`) when run as root. Otherwise, it defaults to a TCP connect scan (`sT`).
+- **Port Specification**: Ports can be defined individually (`p 22,25,80`), in a range (`p 22-80`), or by using predefined options like `-top-ports=10` or `p-` for all ports.
+
+**Example: Scanning Top 10 TCP Ports**
+
+```bash
+sudo nmap 10.129.2.28 --top-ports=10
+
+```
+
+**Output**:
+
+```
+PORT      STATE SERVICE
+21/tcp   closed ftp
+22/tcp   open   ssh
+25/tcp   open   smtp
+80/tcp   open   http
+110/tcp  open   pop3
+139/tcp  filtered netbios-ssn
+
+```
+
+### Packet Tracing
+
+To trace packets sent and received during a scan, use:
+
+```bash
+sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping
+
+```
+
+- **Options**:
+    - `-packet-trace`: Displays all packets sent and received.
+    - `Pn`: Disables ICMP echo requests.
+    - `n`: Disables DNS resolution.
+    - `-disable-arp-ping`: Disables ARP ping.
+
+### Connect Scan
+
+- **TCP Connect Scan (`sT`)**: Completes the TCP three-way handshake to determine port status.
+    - **Advantages**: Highly accurate; determines exact port state.
+    - **Disadvantages**: Less stealthy; creates logs on target systems.
+
+**Example: Connect Scan on TCP Port 443**
+
+```bash
+sudo nmap 10.129.2.28 -p 443 --packet-trace --disable-arp-ping -Pn -n --reason -sT
+
+```
+
+**Output**:
+
+```
+PORT STATE SERVICE REASON
+443/tcp open https syn-ack
+
+```
+
+### Filtered Ports
+
+- **Filtered State**: Indicates that a firewall may be dropping packets. Nmap retries sending packets to determine the port state.
+- **Example of Filtered Port Scan**:
+
+```bash
+sudo nmap 10.129.2.28 -p 139 --packet-trace -n --disable-arp-ping -Pn
+
+```
+
+**Output**:
+
+```
+PORT STATE SERVICE
+139/tcp filtered netbios-ssn
+
+```
+
+### Discovering Open UDP Ports
+
+- **UDP Scans**: Slower than TCP scans due to the stateless nature of UDP. Nmap sends empty datagrams and may not receive responses.
+- **Example: UDP Scan**:
+
+```bash
+sudo nmap 10.129.2.28 -F -sU
+
+```
+
+**Output**:
+
+```
+PORT STATE SERVICE
+68/udp open|filtered dhcpc
+137/udp open netbios-ns
+
+```
+
+### Version Scanning
+
+- **Service Version Detection (`sV`)**: Retrieves additional information about services running on open ports.
+- **Example**:
+
+```bash
+sudo nmap 10.129.2.28 -Pn -n --disable-arp-ping --packet-trace -p 445 --reason -sV
+
+```
+
+**Output**:
+PORT STATE SERVICE REASON VERSION
+445/tcp open netbios-ssn syn-ack ttl 63 Samba smbd 3.X - 4.X (workgroup: WORKGROUP)

@@ -1,0 +1,118 @@
+---
+title: "Footprinting- NFS"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on NFS (Network File System)
+
+**Overview of NFS**
+
+- **Definition**: Network File System (NFS) is a protocol developed by Sun Microsystems for accessing file systems over a network as if they were local.
+- **Compatibility**: Primarily used between Linux and Unix systems; NFS clients cannot communicate with SMB servers.
+- **Internet Standard**: Governs procedures in a distributed file system.
+
+**NFS Versions and Features**
+
+- **NFSv2**:
+  - Older version, supported by many systems.
+  - Operated entirely over UDP.
+
+- **NFSv3**:
+  - Introduced variable file sizes and better error reporting.
+  - Not fully compatible with NFSv2 clients.
+
+- **NFSv4**:
+  - Includes Kerberos for authentication.
+  - Works through firewalls and on the Internet.
+  - No longer requires portmappers.
+  - Supports Access Control Lists (ACLs) and state-based operations.
+  - First version to have a stateful protocol.
+
+- **NFSv4.1**:
+  - Provides support for cluster server deployments (pNFS extension).
+  - Includes session trunking (NFS multipathing).
+  - Uses a single port (UDP/TCP 2049) for service, simplifying firewall configurations.
+
+**Authentication and Authorization**
+
+- **Mechanism**: NFS relies on the Open Network Computing Remote Procedure Call (ONC-RPC/SUN-RPC) protocol.
+- **Ports**: Exposed on TCP and UDP ports 111.
+- **Authentication**: Shifted to RPC protocol options; relies on UNIX UID/GID and group memberships.
+- **Security Note**: Client and server may have different UID/GID mappings, making NFS suitable only for trusted networks.
+
+**Default Configuration**
+
+- **Configuration File**: `/etc/exports` contains a table of filesystems accessible by clients.
+- **Example Exports File**:
+  ```bash
+  # /etc/exports: the access control list for filesystems which may be exported
+  /srv/homes hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
+  ```
+
+- **Options**:
+  - `rw`: Read and write permissions.
+  - `ro`: Read-only permissions.
+  - `sync`: Synchronous data transfer (slower).
+  - `async`: Asynchronous data transfer (faster).
+  - `secure`: Only ports below 1024 will be used.
+  - `insecure`: Allows ports above 1024.
+  - `no_subtree_check`: Disables checking of subdirectory trees.
+  - `root_squash`: Prevents root from accessing files on an NFS mount.
+
+**Dangerous Settings**
+
+- **rw**: Allows read and write permissions, which can be risky.
+- **insecure**: Allows the use of ports above 1024, which can expose the service.
+- **no_root_squash**: Keeps files created by root with UID/GID 0, which can lead to security issues.
+
+**Footprinting the Service**
+
+- **Essential Ports**: TCP ports 111 and 2049 are crucial for NFS.
+- **Nmap Usage**:
+  ```bash
+  sudo nmap 10.129.14.128 -p111,2049 -sV -sC
+  ```
+
+- **Nmap Output Example**:
+  - Shows open ports and running RPC services.
+
+**Mounting NFS Shares**
+
+- **Show Available Shares**:
+  ```bash
+  showmount -e 10.129.14.128
+  ```
+
+- **Mounting Command**:
+  ```bash
+  mkdir target-NFS
+  sudo mount -t nfs 10.129.14.128:/ ./target-NFS/ -o nolock
+  ```
+
+- **Accessing Files**: Navigate to the mounted directory to view contents.
+
+**Listing Contents with Usernames & Group Names**
+
+- **Command**:
+  ```bash
+  ls -l mnt/nfs/
+  ```
+
+- **UID/GID Listing**:
+  ```bash
+  ls -n mnt/nfs/
+  ```
+
+**Escalation and Unmounting**
+
+- **Escalation**: Upload a shell to the NFS share with the SUID of a specific user for further access.
+- **Unmounting Command**:
+  ```bash
+  sudo umount ./target-NFS
+  ```
+
+**Conclusion**
+
+- NFS is a powerful tool for file sharing in trusted networks, but it requires careful configuration to avoid security risks. Always test configurations in a controlled environment.

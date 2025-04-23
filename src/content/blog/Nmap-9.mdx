@@ -1,0 +1,200 @@
+---
+title: "Nmap- Nmap Firewall and IDS/IPS Evasion Techniques"
+publishedAt: 2025-04-10
+summary: ""
+tags: "Nmap"
+---
+
+## Overview
+
+Network security systems like firewalls and Intrusion Detection/Prevention Systems (IDS/IPS) can significantly hinder network scanning activities. Nmap provides various techniques to bypass these security measures, allowing for more effective penetration testing. This guide covers the essential evasion strategies and when to apply them.
+
+## Understanding Security Mechanisms
+
+### Firewalls
+
+Firewalls are security systems that monitor and control incoming and outgoing network traffic based on predetermined security rules. They decide whether to:
+
+- **Pass** - Allow the packet through
+- **Drop** - Silently discard packets without notification
+- **Reject** - Block packets and notify the sender with an error message (usually RST flag or ICMP error)
+
+### IDS/IPS Systems
+
+- **Intrusion Detection Systems (IDS)**: Passively monitor network traffic to detect suspicious activities, then alert administrators
+- **Intrusion Prevention Systems (IPS)**: Actively block detected threats in addition to alerting administrators
+
+IDS/IPS systems typically use signature-based detection and pattern matching to identify potential attacks.
+
+## Detecting Firewalls and Their Rules
+
+When Nmap shows a port as "filtered," it indicates the presence of a firewall or filtering device. The firewall's behavior can provide insights into its configuration.
+
+### Common ICMP Error Responses
+
+When packets are rejected, they may return with specific ICMP error codes:
+
+- Net Unreachable
+- Net Prohibited
+- Host Unreachable
+- Host Prohibited
+- Port Unreachable
+- Proto Unreachable
+
+### Comparing Scan Methods
+
+Different scan types can reveal firewall behavior:
+
+### SYN Scan vs. ACK Scan Example
+
+**SYN Scan:**
+
+```bash
+sudo nmap 10.129.2.28 -p 21,22,25 -sS -Pn -n --disable-arp-ping --packet-trace
+
+```
+
+**ACK Scan:**
+
+```bash
+sudo nmap 10.129.2.28 -p 21,22,25 -sA -Pn -n --disable-arp-ping --packet-trace
+
+```
+
+**Key Observation**: ACK scans can often pass through firewalls more easily than SYN scans because ACK packets may be interpreted as responses to established connections.
+
+| Port | SYN Scan Result | ACK Scan Result | Inference |
+| --- | --- | --- | --- |
+| 21 | filtered | filtered | Packets dropped by firewall |
+| 22 | open | unfiltered | Port is open and accessible |
+| 25 | filtered | filtered | Packets dropped by firewall |
+
+## IDS/IPS Detection and Evasion
+
+### Detecting IDS/IPS Presence
+
+IDS/IPS systems are challenging to detect due to their passive monitoring nature. Methods to detect them include:
+
+1. **Multiple IP Strategy**: Use several VPS servers with different IP addresses for scanning
+2. **Progressive Aggressiveness**: Start with gentle scans and gradually increase aggressiveness to determine when you get blocked
+3. **Monitoring for Connection Blocks**: If your IP suddenly loses all access to the target network, an IPS is likely present
+
+### Decoy Scanning
+
+Decoy scanning disguises the origin of your scan by generating packets with spoofed source IP addresses:
+
+```bash
+sudo nmap 10.129.2.28 -p 80 -sS -Pn -n --disable-arp-ping --packet-trace -D RND:5
+
+```
+
+This command generates 5 random IP addresses and places your real IP randomly among them, making it harder for the target to identify the actual source of the scan.
+
+**Important considerations:**
+
+- Decoy IP addresses should be live hosts to avoid triggering SYN-flooding protections
+- ISPs and routers often filter spoofed packets from outside their network ranges
+- Works best with SYN, ACK, ICMP scans, and OS detection
+
+### Testing Firewall Rules with Source IP Manipulation
+
+If specific subnets have different access permissions, you can test by spoofing your source IP:
+
+```bash
+sudo nmap 10.129.2.28 -n -Pn -p 445 -O -S 10.129.2.200 -e tun0
+
+```
+
+This scan masquerades as coming from IP 10.129.2.200 while scanning port 445.
+
+## DNS Proxying and Source Port Manipulation
+
+### Using Specific DNS Servers
+
+In restricted environments, using internal DNS servers might provide more access:
+
+```bash
+sudo nmap 10.129.2.28 -p 53 --dns-server 10.129.2.1,10.129.2.2
+
+```
+
+### Source Port Manipulation
+
+Security devices often trust traffic from specific ports:
+
+```bash
+sudo nmap 10.129.2.28 -p 50000 -sS -Pn -n --disable-arp-ping --packet-trace --source-port 53
+
+```
+
+The example above uses source port 53 (DNS), which is frequently allowed through firewalls.
+
+**Example Result:**
+
+```
+Port 50000/tcp: filtered (standard scan) → open (using source port 53)
+
+```
+
+### Practical Exploitation
+
+Once you discover a trusted source port, you can use it to establish connections:
+
+```bash
+ncat -nv --source-port 53 10.129.2.28 50000
+
+```
+
+This technique allowed access to a previously filtered ProFTPd service.
+
+## Advanced Evasion Strategies
+
+### Fragment Packets
+
+Packet fragmentation splits TCP headers across multiple packets, potentially bypassing packet inspection:
+
+```bash
+sudo nmap -f 10.129.2.28
+
+```
+
+### Specify MTU
+
+Customize Maximum Transmission Unit size to create unusual packet fragments:
+
+```bash
+sudo nmap --mtu 8 10.129.2.28
+
+```
+
+### Use Timing Options
+
+Slow down scans to avoid triggering rate-based detection:
+
+```bash
+sudo nmap -T0 10.129.2.28
+
+```
+
+### Data Length Manipulation
+
+Add random data to packets to evade pattern-based detection:
+
+```bash
+sudo nmap --data-length 200 10.129.2.28
+
+```
+
+## Best Practices for Evasion
+
+1. **Start Conservative**: Begin with less aggressive methods and escalate only as needed
+2. **Combine Techniques**: Use multiple evasion methods simultaneously for better results
+3. **Distribute Scanning**: Spread scanning activities across multiple source IPs and time periods
+4. **Maintain Multiple Access Paths**: If one IP gets blocked, have alternatives ready
+5. **Document Responses**: Keep detailed notes about which techniques work against specific defenses
+
+## Conclusion
+
+Firewall and IDS/IPS evasion requires a methodical approach and careful testing. The techniques described in this guide should be used responsibly and only in authorized penetration testing scenarios. Understanding how to bypass security measures helps security professionals build more robust defenses and conduct thorough security assessments.
+
+Remember that evasion techniques must be used ethically and legally, with proper authorization from the target organization.

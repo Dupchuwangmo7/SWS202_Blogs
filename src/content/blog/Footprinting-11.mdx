@@ -1,0 +1,92 @@
+---
+title: "Footprinting- IMAP / POP3 "
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+# Notes on IMAP and POP3
+
+**Overview of IMAP and POP3**
+
+- **IMAP (Internet Message Access Protocol)**:
+  - Allows online management of emails directly on the server.
+  - Supports folder structures and synchronization across multiple clients.
+  - Emails remain on the server until deleted, enabling uniform access across clients.
+  - Operates over **port 143** (unencrypted) and **port 993** (encrypted with SSL/TLS).
+  - Text-based protocol that allows multiple commands to be sent in succession.
+  - Requires an active connection to manage emails, but some clients offer offline modes.
+
+- **POP3 (Post Office Protocol)**:
+  - Provides basic functions for listing, retrieving, and deleting emails from the server.
+  - Does not support advanced features like hierarchical mailboxes or simultaneous access by multiple users.
+  - Operates over **port 110** (unencrypted) and **port 995** (encrypted with SSL/TLS).
+
+**IMAP Commands**
+
+| Command                     | Description                                      |
+|-----------------------------|--------------------------------------------------|
+| `LOGIN username password`   | User's login.                                   |
+| `LIST "" *`                | Lists all directories.                          |
+| `CREATE "INBOX"`           | Creates a mailbox with a specified name.       |
+| `DELETE "INBOX"`           | Deletes a mailbox.                              |
+| `RENAME "ToRead" "Important"` | Renames a mailbox.                          |
+| `LSUB "" *`                | Returns a subset of active or subscribed names. |
+| `SELECT INBOX`             | Selects a mailbox for message access.           |
+| `UNSELECT INBOX`           | Exits the selected mailbox.                     |
+| `FETCH <ID> all`           | Retrieves data associated with a message.      |
+| `CLOSE`                    | Removes messages with the Deleted flag set.     |
+| `LOGOUT`                   | Closes the connection with the IMAP server.    |
+
+**POP3 Commands**
+
+| Command                     | Description                                      |
+|-----------------------------|--------------------------------------------------|
+| `USER username`             | Identifies the user.                            |
+| `PASS password`             | Authenticates the user using their password.    |
+| `STAT`                      | Requests the number of saved emails.            |
+| `LIST`                      | Requests the number and size of all emails.     |
+| `RETR id`                  | Requests the server to deliver the email by ID. |
+| `DELE id`                  | Requests the server to delete the email by ID.  |
+| `CAPA`                      | Requests the server to display its capabilities. |
+| `RSET`                      | Resets the transmitted information.             |
+| `QUIT`                      | Closes the connection with the POP3 server.     |
+
+**Security Considerations**
+
+- **Unencrypted Communication**: Both IMAP and POP3 can transmit data in plaintext, making them vulnerable to eavesdropping.
+- **SSL/TLS Encryption**: Recommended to secure communications, typically using ports 993 (IMAP) and 995 (POP3).
+- **Dangerous Settings**:
+  - `auth_debug`: Enables authentication debug logging.
+  - `auth_debug_passwords`: Logs submitted passwords.
+  - `auth_verbose`: Logs unsuccessful authentication attempts.
+  - `auth_anonymous_username`: Specifies username for anonymous login.
+
+**Footprinting the Service**
+
+- **Default Ports**:
+  - POP3: 110 (unencrypted), 995 (encrypted)
+  - IMAP: 143 (unencrypted), 993 (encrypted)
+
+- **Nmap Scanning**: Use Nmap to scan for open ports and identify services.
+  ```bash
+  sudo nmap 10.129.14.128 -sV -p110,143,993,995 -sC
+  ```
+
+- **Example Nmap Output**:
+  - Displays open ports and service versions, including SSL certificate details.
+
+**Interacting with IMAP/POP3 Servers**
+
+- **Using cURL**: To connect to IMAP/POP3 servers securely.
+  ```bash
+  curl -k 'imaps://10.129.14.128' --user user:password
+  ```
+
+- **Using OpenSSL**: For encrypted interactions.
+  ```bash
+  openssl s_client -connect 10.129.14.128:imaps
+  ```
+
+**Conclusion**
+
+- IMAP and POP3 are essential protocols for email management, with IMAP offering more advanced features for online email management. Proper configuration and security measures are crucial to protect against unauthorized access and data breaches.

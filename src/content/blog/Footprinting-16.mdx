@@ -1,0 +1,81 @@
+---
+title: "Footprinting- IPMI"
+publishedAt: 2025-04-20
+summary: ""
+tags: "Footprinting"
+---
+
+# Notes on IPMI (Intelligent Platform Management Interface)
+
+**Overview of IPMI**
+
+- **Definition**: IPMI is a set of standardized specifications for hardware-based host management systems used for system management and monitoring.
+- **Functionality**: Operates independently of the host's BIOS, CPU, firmware, and operating system, allowing management even when the system is powered off or unresponsive.
+- **Common Uses**:
+  - Modifying BIOS settings before the OS boots.
+  - Accessing a host when powered down.
+  - Monitoring system health (temperature, voltage, fan status).
+
+**Components of IPMI**
+
+- **Baseboard Management Controller (BMC)**: A micro-controller that manages the IPMI functions.
+- **Intelligent Chassis Management Bus (ICMB)**: Allows communication between chassis.
+- **Intelligent Platform Management Bus (IPMB)**: Extends the BMC.
+- **IPMI Memory**: Stores system event logs and other data.
+- **Communications Interfaces**: Includes local system interfaces, serial, and LAN interfaces.
+
+**Footprinting the Service**
+
+- **Communication Port**: IPMI communicates over **UDP port 623**.
+- **BMCs**: Systems using IPMI are called Baseboard Management Controllers (BMCs), often embedded in motherboards or added as PCI cards.
+- **Common BMCs**: HP iLO, Dell DRAC, Supermicro IPMI.
+
+**Nmap Scanning Example**
+
+- **Nmap Command**:
+  ```bash
+  sudo nmap -sU --script ipmi-version -p 623 ilo.inlanfreight.local
+  ```
+- **Sample Output**:
+  ```
+  PORT STATE SERVICE
+  623/udp open asf-rmcp
+  | ipmi-version:
+  | Version: IPMI-2.0
+  | UserAuth: PassAuth: auth_user, non_null_user
+  ```
+
+**Metasploit Scanning Example**
+
+- **Using Metasploit**:
+  ```bash
+  msf6 > use auxiliary/scanner/ipmi/ipmi_version
+  msf6 auxiliary(scanner/ipmi/ipmi_version) > set rhosts 10.129.42.195
+  msf6 auxiliary(scanner/ipmi/ipmi_version) > run
+  ```
+
+**Default Passwords for BMCs**
+
+| Product          | Username   | Password                                   |
+|------------------|------------|--------------------------------------------|
+| Dell iDRAC       | root       | calvin                                     |
+| HP iLO           | Administrator | Randomized 8-character string            |
+| Supermicro IPMI  | ADMIN      | ADMIN                                      |
+
+**Dangerous Settings**
+
+- **Vulnerabilities**: Default credentials may lead to unauthorized access.
+- **RAKP Protocol Flaw**: Allows retrieval of password hashes for valid user accounts, which can be cracked offline.
+
+**Metasploit Hash Retrieval Example**
+
+- **Using Metasploit to Dump Hashes**:
+  ```bash
+  msf6 > use auxiliary/scanner/ipmi/ipmi_dumphashes
+  msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > set rhosts 10.129.42.195
+  msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > run
+  ```
+
+**Conclusion**
+
+- IPMI is a critical component for remote management of servers, providing sysadmins with powerful tools for monitoring and control. However, it also presents significant security risks if not properly configured, especially regarding default credentials and vulnerabilities in the protocol. Regular assessments and security practices should include checks for IPMI configurations to prevent unauthorized access and potential exploitation.
