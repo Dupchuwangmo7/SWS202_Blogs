@@ -1,0 +1,108 @@
+---
+title: "Web Informarion- Virtual Hosts"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+##  **DNS Zone Transfers – Notes**
+
+###  What is a Zone Transfer?
+- **DNS Zone Transfer (AXFR)**: Full replication of DNS zone data from one name server (primary) to another (secondary).
+- Used for **redundancy and consistency** across DNS servers.
+
+###  How It Works:
+1. **AXFR Request**: Secondary server requests zone data from the primary.
+2. **SOA Record**: Primary sends Start of Authority (SOA) record with zone version info.
+3. **Record Transfer**: All DNS records (A, MX, CNAME, NS, etc.) are sent.
+4. **Completion Signal**: Primary indicates the end of transfer.
+5. **ACK**: Secondary acknowledges successful receipt.
+
+### Vulnerability
+- If **improperly configured**, any host can request the zone file.
+- **Sensitive Info Exposed**:
+  - Subdomains (even hidden ones)
+  - IP addresses
+  - Name server details
+- Historically common due to default-open configurations.
+
+###  Remediation
+- Limit zone transfers to **trusted IPs only**.
+- Regularly audit DNS server configuration.
+
+###  Exploitation Example (legally for testing):
+```bash
+dig axfr @nsztm1.digi.ninja zonetransfer.me
+```
+- If successful, returns all records for `zonetransfer.me`.
+
+---
+
+## **Virtual Hosts – Notes**
+
+###  What Are Virtual Hosts?
+- Allows hosting **multiple websites on one server/IP** using:
+  - **Name-based** (most common)
+  - **IP-based**
+  - **Port-based**
+
+###  Key Concept
+- Uses the **Host header** in the HTTP request to identify the target site.
+
+###  Subdomains vs VHosts
+| Subdomains | Virtual Hosts (VHosts) |
+|------------|------------------------|
+| DNS-level (e.g., blog.example.com) | Web server-level config |
+| May point to different IPs | Share same IP |
+| Need DNS records | Can be local only via `/etc/hosts` |
+
+###  VHost Apache Config Example:
+```apache
+<VirtualHost *:80>
+    ServerName www.example1.com
+    DocumentRoot /var/www/example1
+</VirtualHost>
+```
+
+###  Server Lookup Process:
+1. Browser sends request with Host header (e.g., `www.site.com`).
+2. Server reads Host header and finds matching config.
+3. Serves content from the defined `DocumentRoot`.
+
+---
+
+## Virtual Host Discovery
+
+###  Tools:
+| Tool        | Features |
+|-------------|----------|
+| **Gobuster** | Fast, customizable, supports VHost fuzzing |
+| **Feroxbuster** | Rust-based, supports recursion, filters |
+| **ffuf**     | Fuzz Host headers, flexible |
+
+###  Gobuster Usage:
+1. Find target IP.
+2. Use a wordlist (e.g., from **SecLists**).
+3. Command:
+```bash
+gobuster vhost -u http://<IP> -w <wordlist> --append-domain
+```
+
+- `-u`: Target URL/IP
+- `-w`: Wordlist path
+- `--append-domain`: Combines each word with the base domain
+- Optional:
+  - `-t`: Threads (speed)
+  - `-o`: Output file
+  - `-k`: Ignore SSL errors
+
+ **Example Output**:
+```bash
+Found: forum.inlanefreight.htb:81 Status: 200
+```
+
+###  Caution
+- Can generate high traffic.
+- Might trigger **WAFs or IDS**.
+- **Always get permission** before scanning.
+

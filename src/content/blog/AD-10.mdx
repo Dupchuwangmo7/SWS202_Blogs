@@ -1,0 +1,62 @@
+---
+title: "Active directory- Active Directory Rights and Privileges"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+
+### Active Directory Rights and Privileges Overview
+- **Rights vs. Privileges**:
+  - **Rights**: Permissions to access objects (e.g., files).
+  - **Privileges**: Permissions to perform actions (e.g., run programs, shut down systems).
+- **User  Rights Assignment**: Windows has a concept of User Rights Assignment, which refers to privileges granted to users.
+
+### Built-in Active Directory Groups
+- **Importance**: Built-in groups can grant powerful rights and privileges that may lead to privilege escalation if mismanaged.
+- **Common Built-in Groups**:
+  - **Account Operators**: Can create and modify accounts but cannot manage certain administrative accounts.
+  - **Administrators**: Full access to the domain and local machines.
+  - **Backup Operators**: Can back up and restore files; can log on to DCs locally.
+  - **Domain Admins**: Full access to administer the domain; members of local admin groups on all domain-joined machines.
+  - **Enterprise Admins**: Complete configuration access within the domain; exists only in the root domain.
+  - **Server Operators**: Can administer domain servers; typically has no members by default.
+
+### Group Membership Examples
+- **Server Operators**: 
+  - Group Scope: Domain Local
+  - Default State: No members
+- **Domain Admins**: 
+  - Group Scope: Global
+  - Membership: Includes multiple accounts and service accounts.
+
+### User Rights Assignment
+- **User  Rights**: Assigned based on group membership and can lead to unintended consequences if misconfigured.
+- **Examples of Privileges**:
+  - **SeRemoteInteractiveLogonRight**: Allows RDP access.
+  - **SeBackupPrivilege**: Grants ability to back up files, potentially accessing sensitive data.
+  - **SeDebugPrivilege**: Allows debugging processes, which can be exploited to extract credentials.
+  - **SeImpersonatePrivilege**: Allows impersonation of privileged accounts, facilitating privilege escalation.
+
+### Viewing User Privileges
+- **Command**: `whoami /priv` displays user rights assigned to the current user.
+- **Standard Domain User Rights**: Limited rights, primarily basic permissions.
+- **Domain Admin Rights**: Elevated rights available only in an elevated console due to User Account Control (UAC).
+
+### Backup Operators Rights
+- **Example Rights**: 
+  - **SeShutdownPrivilege**: Can shut down the system.
+  - **SeChangeNotifyPrivilege**: Bypass traverse checking.
+
+### Security Considerations
+- **Strict Control**: Access to built-in groups should be tightly controlled to prevent privilege escalation.
+- **Best Practices**:
+  - Keep built-in groups empty unless necessary.
+  - Monitor accounts with elevated privileges.
+  - Use strong passwords for accounts with elevated access.
+  - Separate administrative accounts from day-to-day user accounts.
+
+### Conclusion
+- Understanding rights and privileges in Active Directory is crucial for maintaining security.
+- Mismanagement can lead to significant vulnerabilities, making it essential to audit and control group memberships and user rights effectively.
+

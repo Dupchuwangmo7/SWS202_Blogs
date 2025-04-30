@@ -1,0 +1,150 @@
+---
+title: "Web Informarion- Fingerprinting"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+#  Web Reconnaissance Notes: Fingerprinting
+
+##  What is Fingerprinting?
+- Fingerprinting is the process of **extracting technical details** about a website’s underlying infrastructure.
+- Like a fingerprint uniquely identifies a person, server and software “signatures” can help identify:
+  - Web servers
+  - Operating systems
+  - CMSs and other web technologies
+
+---
+
+##  Why is Fingerprinting Important?
+- **Targeted Attacks**: Identifying software versions enables precise exploitation.
+- **Detect Misconfigurations**: Finds default settings, outdated software, weak headers.
+- **Target Prioritization**: Focuses efforts on likely vulnerable or high-value systems.
+- **Infrastructure Profiling**: Builds a holistic view for informed attack planning.
+
+---
+
+##  Fingerprinting Techniques
+
+| Technique | Description |
+|----------|-------------|
+| **Banner Grabbing** | Pull service banners (e.g., `curl -I`) to reveal server software/version. |
+| **HTTP Header Analysis** | Headers like `Server` or `X-Powered-By` can expose tech details. |
+| **Probing Specific Responses** | Custom requests can trigger unique errors revealing server/CMS types. |
+| **Page Content Analysis** | Inspect HTML structure, metadata, JavaScript files, copyright. |
+
+---
+
+##  Common Fingerprinting Tools
+
+| Tool | Description |
+|------|-------------|
+| **Wappalyzer** | Browser extension that detects CMS, JS frameworks, analytics, etc. |
+| **BuiltWith** | Web-based profiler for detailed tech stack reports. |
+| **WhatWeb** | CLI tool with a large signature DB for CMS & plugin detection. |
+| **Nmap** | Network scanner; with NSE scripts, can identify services & OS. |
+| **Netcraft** | Online tool for tech profiling + security posture. |
+| **wafw00f** | Detects presence and type of Web Application Firewalls. |
+| **Nikto** | Web scanner for outdated software, misconfigs, and header issues. |
+
+---
+
+## Case Study: Fingerprinting `inlanefreight.com`
+
+### Banner Grabbing
+
+#### Command:
+```bash
+curl -I inlanefreight.com
+```
+
+#### Output:
+```http
+Server: Apache/2.4.41 (Ubuntu)
+Location: https://inlanefreight.com/
+```
+
+- Redirects to HTTPS → check next hop.
+
+```bash
+curl -I https://inlanefreight.com
+```
+```http
+Server: Apache/2.4.41 (Ubuntu)
+X-Redirect-By: WordPress
+```
+
+- Indicates **WordPress is redirecting** to `www.inlanefreight.com`.
+
+```bash
+curl -I https://www.inlanefreight.com
+```
+```http
+Link: <.../wp-json/>; rel="https://api.w.org/"
+```
+
+- Confirms **WordPress JSON API** is present → clearly a WordPress site.
+
+---
+
+###  WAF Detection (wafw00f)
+
+#### Command:
+```bash
+wafw00f inlanefreight.com
+```
+
+#### Output:
+```
+[+] The site https://inlanefreight.com is behind Wordfence (Defiant) WAF.
+```
+
+- **WAF Detected**: Wordfence by Defiant.
+- Implication: May block automated scans or probing.
+
+---
+
+###  Fingerprinting with Nikto
+
+#### Installation (if needed):
+```bash
+sudo apt update && sudo apt install -y perl
+git clone https://github.com/sullo/nikto
+cd nikto/program && chmod +x ./nikto.pl
+```
+
+#### Scan Command:
+```bash
+nikto -h inlanefreight.com -Tuning b
+```
+- `-Tuning b`: Runs **software identification modules only**.
+
+#### Key Findings:
+- **Multiple IPs**: Both IPv4 & IPv6.
+- **Server**: Apache/2.4.41 (Ubuntu) — **outdated** (latest is 2.4.59+).
+- **CMS**: WordPress detected (`/wp-login.php`, `x-redirect-by`, `wp-json`).
+- **Headers**:
+  - `Strict-Transport-Security` → **missing**
+  - `X-Content-Type-Options` → **missing**
+  - `X-Frame-Options` → deprecated
+- **Files Found**:
+  - `/license.txt` → potential info disclosure
+- **Security Flags**:
+  - Accepts **junk HTTP methods**
+  - WordPress cookie lacks `httponly`
+- **Vulnerabilities**:
+  - TLS-related config issues
+  - Potential exposure to known Apache/WordPress vulnerabilities
+
+---
+
+##  Summary
+
+| Element | Detail |
+|--------|--------|
+| Server | Apache/2.4.41 (Ubuntu) – outdated |
+| CMS | WordPress |
+| WAF | Wordfence (Defiant) |
+| Issues | Missing headers, outdated software, exposed endpoints (`/wp-login.php`, `/wp-json/`) |
+

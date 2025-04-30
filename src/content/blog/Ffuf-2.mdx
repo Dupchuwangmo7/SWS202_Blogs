@@ -1,0 +1,59 @@
+---
+title: "Ffuf-Web Fuzzing"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+
+### Web Fuzzing with Ffuf
+
+#### Introduction to Web Fuzzing
+Web fuzzing is a technique used to discover hidden resources, directories, and files on a web server by sending various types of user input. This process helps identify vulnerabilities and understand how the server responds to different requests.
+
+#### What is Fuzzing?
+- **Definition**: Fuzzing involves sending a range of inputs to a web application to observe its behavior and responses. This can help identify vulnerabilities such as SQL injection or buffer overflow.
+- **Application**: In web fuzzing, predefined wordlists containing common directory and file names are used to test the existence of resources on a web server.
+
+#### The Fuzzing Process
+1. **Identify the Target**: Start with a URL that has limited information or links.
+2. **Send Requests**: Use a tool like **ffuf** to send requests for various directories and files based on a wordlist.
+3. **Analyze Responses**:
+   - A **200 OK** response indicates that the resource exists.
+   - A **404 Not Found** response indicates that the resource does not exist.
+
+#### Example Scenario
+- **Target URL**: Suppose we visit `https://www.hackthebox.eu/doesnotexist`, which returns a **404 Page Not Found**.
+- **Valid Resource**: If we visit `https://www.hackthebox.eu/login`, we receive a **200 OK** response and access the login page.
+
+#### Importance of Automation
+Manually checking each possible directory or file would be time-consuming. Tools like ffuf automate this process, sending hundreds of requests per second and analyzing the HTTP response codes to quickly determine which pages exist.
+
+#### Wordlists for Fuzzing
+- **Purpose**: Wordlists contain commonly used terms for web directories and files, similar to a password dictionary attack.
+- **Success Rate**: While not exhaustive, using a good wordlist can yield a success rate of up to 90% in discovering existing pages.
+- **Source**: The **SecLists** repository on GitHub provides a variety of wordlists categorized by type, including those for web fuzzing.
+
+#### Using SecLists
+- **Location**: In your PwnBox, the SecLists repository can be found at `/opt/useful/SecLists`.
+- **Specific Wordlist**: For directory and page fuzzing, you will use the `directory-list-2.3-small` wordlist, located at:
+  ```bash
+  /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt
+  ```
+
+#### Cleaning Up the Wordlist
+- **Copyright Comments**: The wordlist may contain copyright comments at the beginning, which can clutter results.
+- **Using the `-ic` Flag**: When running ffuf, you can use the `-ic` flag to ignore lines that contain specific patterns (like copyright comments) to clean up the output.
+
+### Example Ffuf Command
+Here’s how you might run ffuf to fuzz for directories using the specified wordlist:
+
+```bash
+ffuf -u https://www.hackthebox.eu/FUZZ -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt -ic
+```
+
+- **`-u`**: Specifies the target URL with `FUZZ` as a placeholder for the wordlist entries.
+- **`-w`**: Specifies the path to the wordlist.
+- **`-ic`**: Ignores lines that match the specified pattern (e.g., copyright comments).
+
+### Conclusion
+Web fuzzing with tools like ffuf is an essential technique for discovering hidden resources and vulnerabilities in web applications. By utilizing predefined wordlists and automating the process, you can efficiently identify existing directories and files, paving the way for further security assessments.

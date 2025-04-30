@@ -1,0 +1,88 @@
+---
+title: "Web Informarion- Certificate Transparency Logs"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+##  **Certificate Transparency (CT) Logs – Notes**
+
+### What Are CT Logs?
+- **Public, append-only ledgers** of all issued SSL/TLS certificates.
+- Maintained by independent, trusted organizations.
+- Part of efforts to improve **trust, accountability, and visibility** in the SSL ecosystem.
+- CAs **must** submit certificates to CT logs to comply with modern browser policies.
+
+---
+
+###  **Purpose & Benefits**
+| Objective | Description |
+|----------|-------------|
+|  Early Detection | Detect **rogue or misissued certificates** (issued without consent or incorrectly). |
+| Public Accountability | Makes **CA actions transparent**, allowing auditing and detection of bad practices. |
+|  Strengthening PKI | Enhances security of the **Web Public Key Infrastructure**, preventing misuse of certificates. |
+
+---
+
+### **How CT Logs Work (Simplified)**
+1. A **CA issues** an SSL/TLS certificate.
+2. It **submits** the certificate to multiple CT logs.
+3. Logs provide **Signed Certificate Timestamps (SCTs)** proving the cert was logged.
+4. Web browsers verify SCTs before establishing a trusted connection.
+
+---
+
+##  **CT Logs for Recon & Subdomain Enumeration**
+
+### 🕸️ CT Logs vs Traditional Methods
+| Method | Limitation |
+|--------|------------|
+| Wordlists/Brute-force | Depends on guesswork, limited by creativity or list size. |
+| **CT Logs** | Show real, historically issued certs including subdomains, expired ones, and hidden infrastructure. |
+
+### Use Cases
+- Find **non-obvious subdomains** like dev/staging environments.
+- Detect **legacy infrastructure** or forgotten subdomains.
+- Reveal **security blind spots** that might not resolve in DNS anymore.
+
+---
+
+##  **CT Log Search Tools**
+
+| Tool     | Features | Pros | Cons |
+|----------|----------|------|------|
+| **crt.sh** | Free, simple domain search | No signup, JSON API available | Limited filtering |
+| **Censys** | Deep search by IP/domain/cert attributes | Powerful filters, API access | Registration required |
+
+---
+
+## **Example – Search with `crt.sh` API**
+
+Command:
+```bash
+curl -s "https://crt.sh/?q=facebook.com&output=json" \
+| jq -r '.[] | select(.name_value | contains("dev")) | .name_value' \
+| sort -u
+```
+
+###  Explanation:
+- `curl`: Retrieves certificate data for facebook.com in JSON.
+- `jq`: Filters for names containing `"dev"`.
+- `sort -u`: Sorts results and removes duplicates.
+
+### Sample Output:
+```
+dev.facebook.com
+*.dev.facebook.com
+newdev.facebook.com
+*.secure.dev.facebook.com
+devvm1958.ftw3.facebook.com
+```
+
+---
+
+###  Notes
+- Some subdomains discovered via CT logs may no longer be active.
+- Results **do not require DNS resolution** – they show what was historically issued.
+

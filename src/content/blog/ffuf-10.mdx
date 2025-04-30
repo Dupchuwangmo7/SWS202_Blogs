@@ -1,0 +1,78 @@
+---
+title: "Ffuf- Parameter Fuzzing - GET"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+
+### Parameter Fuzzing - GET Requests with Ffuf
+
+#### Introduction to Parameter Fuzzing
+Parameter fuzzing is a technique used to discover hidden or undocumented parameters in web applications. These parameters can often be manipulated to access restricted resources or to exploit vulnerabilities. In this section, we will focus on fuzzing GET parameters, which are typically included in the URL after a `?` symbol.
+
+#### Understanding GET Requests
+A typical GET request with parameters looks like this:
+```
+http://admin.academy.htb:PORT/admin/admin.php?param1=key
+```
+In this example, `param1` is the parameter name, and `key` is the value being passed. To fuzz for parameters, we will replace `param1` with the keyword `FUZZ`.
+
+#### Choosing a Wordlist
+For fuzzing parameters, we can use a wordlist that contains common parameter names. The SecLists repository provides a suitable wordlist located at:
+```
+/opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt
+```
+
+#### Running the Ffuf Command for GET Parameter Fuzzing
+You can run the following command to perform GET parameter fuzzing:
+
+```bash
+ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php?FUZZ=key
+```
+
+#### Example Output
+When you run the command, you may see output similar to this:
+
+```
+/'___\ /'___\ /'___\
+/\ \__/ /\ \__/ __ __ /\ \__/
+\ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+\ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+\ \_\ \ \_\ \ \____/ \ \_\
+\/_/ \/_/ \/___/ \/_/
+v1.1.0-git
+________________________________________________
+:: Method : GET
+:: URL : http://admin.academy.htb:PORT/admin/admin.php?FUZZ=key
+:: Wordlist : FUZZ: /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt
+:: Follow redirects : false
+:: Calibration : false
+:: Timeout : 10
+:: Threads : 40
+:: Matcher : Response status: 200,204,301,302,307,401,403
+:: Filter : Response size: xxx
+________________________________________________
+<...SNIP...> [Status: xxx, Size: xxx, Words: xxx, Lines: xxx]
+```
+
+#### Filtering Results
+As with previous fuzzing techniques, you may receive many responses, including those with a default size that indicates a non-relevant result. To filter out these responses, you can use the `-fs` option to exclude responses of a specific size.
+
+For example, if you know that the default response size is 900 bytes, you can run:
+
+```bash
+ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php?FUZZ=key -fs 900
+```
+
+#### Analyzing the Results
+After running the command, you may find that one of the parameters returns a different response size or status code. For example, if you receive a response with a status code of **200 OK** and a different size, it indicates that the parameter is valid and may lead to further exploration.
+
+#### Testing the Valid Parameter
+If you identify a parameter that seems promising, you can test it by appending it to the URL. For example:
+
+```
+http://admin.academy.htb:PORT/admin/admin.php?valid_param=value
+```
+
+#### Conclusion
+Parameter fuzzing is a valuable technique for discovering hidden parameters in web applications. By using ffuf to enumerate potential parameters, you can identify those that may lead to sensitive information or vulnerabilities. Always remember to filter your results to focus on the most relevant responses, and test any promising parameters for further exploration. This method can help you uncover critical information, such as flags or access to restricted areas of the application.

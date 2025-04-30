@@ -1,0 +1,44 @@
+---
+title: "Ffuf-Introduction"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+### Introduction to Attacking Web Applications with Ffuf
+
+
+#### Overview of Ffuf
+- **Ffuf** (Fuzz Faster U Fool) is a powerful and reliable tool designed for web fuzzing.
+- It automates the process of sending requests to a web server based on a predefined list of potential directories, files, or parameters.
+- By analyzing the server's responses, ffuf helps identify existing resources that may not be directly linked or visible.
+
+#### Topics Covered in This Module
+1. **Fuzzing for Directories**:
+   - Techniques to discover hidden directories within a web application.
+   - Using ffuf to send requests for common directory names and analyze responses.
+
+2. **Fuzzing for Files and Extensions**:
+   - Identifying files with specific extensions that may contain sensitive information.
+   - Utilizing ffuf to test for the existence of files like `.php`, `.txt`, `.bak`, etc.
+
+3. **Identifying Hidden Virtual Hosts (vhosts)**:
+   - Techniques to discover hidden virtual hosts on a web server.
+   - Using ffuf to send requests to potential subdomains or vhosts.
+
+4. **Fuzzing for PHP Parameters**:
+   - Exploring PHP parameters in web applications to identify potential vulnerabilities.
+   - Using ffuf to test for common parameter names and their existence.
+
+5. **Fuzzing for Parameter Values**:
+   - Testing different values for parameters to uncover hidden functionality or vulnerabilities.
+   - Utilizing ffuf to send various payloads and analyze server responses.
+
+#### How Ffuf Works
+- Ffuf operates by taking a list of potential paths, files, or parameters and sending HTTP requests to the target web server.
+- For each entry in the list, ffuf checks the server's response:
+  - A **200 OK** response indicates that the resource exists.
+  - Other response codes (e.g., 404 Not Found) suggest that the resource does not exist.
+- This automated approach allows for efficient and thorough exploration of a web application's structure and functionality.
+
+#### Conclusion
+In this module, we will delve into the practical applications of ffuf for web fuzzing, providing you with the skills to effectively identify hidden resources and potential vulnerabilities in web applications. By the end of this module, you will be equipped to use ffuf as a key tool in your web application security assessments.

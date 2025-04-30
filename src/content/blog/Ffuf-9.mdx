@@ -1,0 +1,79 @@
+---
+title: "Ffuf- Filtering Results"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+### Filtering Results in Ffuf
+
+#### Introduction to Filtering
+When using ffuf for fuzzing, you may receive a large number of responses, especially when many of them return a **200 OK** status. To make your results more manageable and relevant, you can apply filters based on various criteria, such as HTTP status codes, response sizes, and the number of words or lines in the response.
+
+#### Filtering Options in Ffuf
+Ffuf provides several filtering options that can help you refine your results:
+- **`-mc`**: Match specific HTTP status codes (e.g., `-mc 200,301`).
+- **`-fc`**: Filter out specific HTTP status codes (e.g., `-fc 404`).
+- **`-ms`**: Match HTTP response size (e.g., `-ms 500`).
+- **`-fs`**: Filter out specific response sizes (e.g., `-fs 900`).
+- **`-mw`**: Match the number of words in the response.
+- **`-fl`**: Filter by the number of lines in the response.
+
+#### Applying Filters to Vhost Fuzzing
+In the context of Vhost fuzzing, you may want to filter out responses that return a default size (e.g., 900 bytes) that indicates a non-existent Vhost. Since you know that the incorrect results return a size of 900, you can filter these out using the `-fs` option.
+
+#### Running the Vhost Fuzzing Command with Filtering
+You can run the following command to perform Vhost fuzzing while filtering out responses with a size of 900 bytes:
+
+```bash
+ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H "Host: FUZZ.academy.htb" -fs 900
+```
+
+#### Example Output
+When you run the command, you may see output similar to this:
+
+```
+/'___\ /'___\ /'___\
+/\ \__/ /\ \__/ __ __ /\ \__/
+\ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+\ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+\ \_\ \ \_\ \ \____/ \ \_\
+\/_/ \/_/ \/___/ \/_/
+v1.1.0-git
+________________________________________________
+:: Method : GET
+:: URL : http://academy.htb:PORT/
+:: Wordlist : FUZZ: /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+:: Header : Host: FUZZ.academy.htb
+:: Follow redirects : false
+:: Calibration : false
+:: Timeout : 10
+:: Threads : 40
+:: Matcher : Response status: 200,204,301,302,307,401,403
+:: Filter : Response size: 900
+________________________________________________
+admin [Status: 200, Size: 0, Words: 1, Lines: 1]
+:: Progress: [4997/4997] :: Job [1/1] :: 1249 req/sec :: Duration: [0:00:04] :: Errors: 0
+```
+
+#### Verifying the Results
+- **Accessing the Vhost**: You can verify the existence of the `admin` Vhost by visiting the URL:
+  ```
+  http://admin.academy.htb:PORT/
+  ```
+  If you see an empty page, it indicates that the Vhost exists but may not have content.
+
+- **Testing Specific Pages**: You can further test specific pages under this Vhost, such as:
+  ```
+  https://admin.academy.htb:PORT/blog/index.php
+  ```
+  If you receive a **404 PAGE NOT FOUND** response, it confirms that you are indeed on a different Vhost.
+
+#### Running a Recursive Scan
+To explore the `admin.academy.htb` Vhost further, you can run a recursive scan to identify any additional pages or resources:
+
+```bash
+ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://admin.academy.htb:PORT/FUZZ -e .php -recursion -recursion-depth 1
+```
+
+### Conclusion
+Filtering results in ffuf is a powerful way to refine your fuzzing output and focus on relevant responses. By filtering out default response sizes, you can identify valid Vhosts and explore them further. This technique enhances your reconnaissance efforts and can lead to the discovery of hidden resources within web applications.

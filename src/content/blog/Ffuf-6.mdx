@@ -1,0 +1,43 @@
+---
+title: "Ffuf- DNS Records" 
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+
+### DNS Records and Accessing Local Domains
+
+#### Understanding DNS and Local Domains
+When working with local environments, such as those found in Hack The Box (HTB), you may encounter domains that are not publicly accessible. For example, the domain `academy.htb` may be referenced in the application, but if your system does not know how to resolve this domain to an IP address, you will be unable to access it.
+
+#### Why Can't We Access `academy.htb`?
+1. **Local Resolution**: Browsers resolve URLs to IP addresses using the local `/etc/hosts` file and public DNS servers. If a domain is not listed in either, the browser cannot connect to it.
+2. **Direct IP Access**: If you access the server directly via its IP address, the browser can connect without needing to resolve a domain name.
+
+#### Adding `academy.htb` to Your `/etc/hosts` File
+To access the local domain `academy.htb`, you need to map it to the server's IP address in your `/etc/hosts` file. You can do this with the following command:
+
+```bash
+sudo sh -c 'echo "SERVER_IP academy.htb" >> /etc/hosts'
+```
+- Replace `SERVER_IP` with the actual IP address of the server.
+
+#### Accessing the Website
+After updating your `/etc/hosts` file, you can visit the website using the following URL (make sure to include the correct port):
+
+```
+http://academy.htb:PORT
+```
+
+#### Verifying the Domain
+Once you access `http://academy.htb:PORT`, you may find that it displays the same content as when you accessed the server directly via its IP address. You can verify that you are indeed accessing the correct domain by navigating to a specific page, such as:
+
+```
+http://academy.htb:PORT/blog/index.php
+```
+
+#### Exploring Subdomains
+Since your previous scans did not reveal any admin panels or specific pages related to administration, the next step is to explore potential subdomains under `*.academy.htb`. Subdomain enumeration can help uncover hidden resources that may not be directly linked from the main application.
+
+### Conclusion
+Understanding how to manage DNS records and local domain resolution is crucial when working in environments like HTB. By adding entries to your `/etc/hosts` file, you can access local domains that are not publicly resolvable. This allows you to explore the application more thoroughly, including any potential subdomains that may contain valuable information or hidden functionalities. In the next section, we will focus on discovering subdomains under `academy.htb` to further our reconnaissance efforts.

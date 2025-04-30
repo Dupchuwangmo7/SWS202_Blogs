@@ -1,0 +1,47 @@
+---
+title: "Web Information- WHOIS"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+# WHOIS Protocol - Notes
+
+## Basic Definition
+- Query and response protocol to access databases storing internet resource information
+- "Phonebook for the internet" - looks up ownership of online assets
+- Used for domain names, IP address blocks, and autonomous systems
+
+## Command Example
+```
+whois inlanefreight.com
+```
+Reveals domain registration details, creation dates, etc.
+
+## Typical WHOIS Record Information
+- Domain Name (e.g., example.com)
+- Registrar (e.g., GoDaddy, Namecheap)
+- Registrant Contact (person/organization that registered domain)
+- Administrative Contact (person managing domain)
+- Technical Contact (person handling technical issues)
+- Creation and Expiration Dates
+- Name Servers (servers translating domain names to IP addresses)
+
+## Historical Context
+- Created in the 1970s by Elizabeth Feinler and team at Stanford Research Institute's Network Information Center
+- Developed for ARPANET (internet precursor)
+- Initially tracked network users, hostnames, and domain names
+
+## Importance for Web Reconnaissance
+1. **Identifying Key Personnel**:
+   - Reveals names, emails, phone numbers of domain managers
+   - Provides potential targets for social engineering/phishing
+
+2. **Discovering Network Infrastructure**:
+   - Provides name servers and IP addresses
+   - Helps identify potential entry points or misconfigurations
+
+3. **Historical Data Analysis**:
+   - Historical WHOIS records show changes in ownership/contacts
+   - Enables tracking of target's digital presence evolution
+   - Available through services like WhoisFreaks

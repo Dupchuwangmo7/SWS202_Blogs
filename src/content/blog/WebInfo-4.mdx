@@ -1,0 +1,88 @@
+---
+title: "Web Information- DNS"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+# DNS (Domain Name System) - Notes
+
+## Basic Definition & Analogy
+- **DNS**: Internet's GPS, translating memorable domain names to numerical IP addresses
+- Similar to translating destination names into latitude/longitude coordinates
+- Essential for navigating the web without memorizing IP addresses
+
+## How DNS Works (Step-by-Step)
+1. **Computer Initiates DNS Query**:
+   - Checks local cache for IP address
+   - If not found, sends query to DNS resolver (typically ISP-provided)
+
+2. **DNS Resolver Performs Recursive Lookup**:
+   - Checks its own cache
+   - If not found, queries root name server
+
+3. **Hierarchical Resolution Chain**:
+   - Root name server → directs to TLD name server (.com, .org, etc.)
+   - TLD name server → directs to authoritative name server
+   - Authoritative name server → returns the actual IP address
+
+4. **Connection Established**:
+   - Resolver returns IP to computer
+   - Computer connects to web server using IP address
+
+## The Hosts File
+- Simple text file that maps hostnames to IP addresses
+- Local override that bypasses DNS resolution
+- Location:
+  - Windows: `C:\Windows\System32\drivers\etc\hosts`
+  - Linux/MacOS: `/etc/hosts`
+- Format: `<IP Address> <Hostname> [<Alias> ...]`
+- Common uses:
+  - Local development (`127.0.0.1 myapp.local`)
+  - Testing connectivity (`192.168.1.20 testserver.local`)
+  - Blocking websites (`0.0.0.0 unwanted-site.com`)
+
+## Key DNS Concepts
+
+| DNS Concept | Description | Example |
+|-------------|-------------|---------|
+| Domain Name | Human-readable label for internet resource | www.example.com |
+| IP Address | Unique numerical identifier for devices | 192.0.2.1 |
+| DNS Resolver | Server translating domain names to IPs | ISP DNS, Google DNS (8.8.8.8) |
+| Root Name Server | Top-level servers in DNS hierarchy | a.root-servers.net through m.root-servers.net |
+| TLD Name Server | Servers for specific top-level domains | Verisign (.com), PIR (.org) |
+| Authoritative Name Server | Server with actual IP for domain | Hosting provider's DNS |
+| DNS Zone | Part of domain namespace managed by entity | example.com and its subdomains |
+| Zone File | Text file defining resource records in zone | Contains SOA, NS, A records, etc. |
+
+## DNS Record Types
+
+| Record Type | Full Name | Description | Example |
+|-------------|-----------|-------------|---------|
+| A | Address Record | Maps hostname to IPv4 address | `www.example.com. IN A 192.0.2.1` |
+| AAAA | IPv6 Address Record | Maps hostname to IPv6 address | `www.example.com. IN AAAA 2001:db8:85a3::8a2e:370:7334` |
+| CNAME | Canonical Name Record | Creates alias pointing to another hostname | `blog.example.com. IN CNAME webserver.example.net.` |
+| MX | Mail Exchange Record | Specifies mail servers for domain | `example.com. IN MX 10 mail.example.com.` |
+| NS | Name Server Record | Delegates DNS zone to authoritative name server | `example.com. IN NS ns1.example.com.` |
+| TXT | Text Record | Stores arbitrary text information | `example.com. IN TXT "v=spf1 mx -all"` |
+| SOA | Start of Authority Record | Administrative info about DNS zone | `example.com. IN SOA ns1.example.com. admin.example.com. 2024060301 10800 3600 604800 86400` |
+| SRV | Service Record | Defines hostname and port for services | `_sip._udp.example.com. IN SRV 10 5 5060 sipserver.example.com.` |
+| PTR | Pointer Record | Maps IP address to hostname (reverse lookup) | `1.2.0.192.in-addr.arpa. IN PTR www.example.com.` |
+
+> Note: "IN" in records stands for "Internet", specifying the protocol family (Internet protocol suite)
+
+## Significance for Web Reconnaissance
+
+1. **Uncovering Assets**:
+   - Reveals subdomains, mail servers, name servers
+   - Can expose outdated or vulnerable systems (e.g., old CNAME records)
+
+2. **Mapping Network Infrastructure**:
+   - Creates comprehensive view of target network
+   - Identifies hosting providers, load balancers, system connections
+   - Helps pinpoint potential weaknesses or entry points
+
+3. **Monitoring for Changes**:
+   - Tracks infrastructure modifications over time
+   - Identifies new potential entry points (e.g., new subdomains)
+   - Can reveal organizational tools or services (e.g., TXT records)

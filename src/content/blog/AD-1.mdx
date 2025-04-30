@@ -1,0 +1,54 @@
+---
+title: "Active directory- Why Active Directory?"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory (AD) Overview Notes
+
+#### What is Active Directory?
+- **Definition**: A directory service for Windows network environments, providing centralized management of resources (users, computers, groups, etc.).
+- **Structure**: Distributed, hierarchical, scalable, and supports millions of objects per domain.
+- **Functions**: Provides authentication and authorization within a Windows domain.
+
+#### Importance of Active Directory
+- **Prevalence**: Used by approximately 95% of Fortune 500 companies, making it a significant target for attackers.
+- **Vulnerabilities**: AD has been increasingly attacked, with many features not being "secure by default." Misconfigurations can lead to unauthorized access.
+- **User  Enumeration**: Any user account can enumerate most objects within AD, highlighting the need for proper security measures.
+
+#### Security Concerns
+- **Attack Vectors**: Standard domain user accounts can be exploited for lateral and vertical movement within a network.
+- **Notable Attacks**: 
+  - **noPac Attack**: Exploits vulnerabilities in AD.
+  - **Ransomware Targeting**: Ransomware like Conti leverages AD vulnerabilities (e.g., PrintNightmare, Zerologon) for privilege escalation.
+- **Defense Strategy**: Emphasizes defense-in-depth, network segmentation, and least privilege access.
+
+#### Active Directory Structure and Function
+- **Objects**: Users, computers, groups, network devices, file shares, group policies, and trusts.
+- **Management**: Understanding user rights, privileges, and tools for managing AD is crucial for security professionals.
+
+#### History of Active Directory
+- **Origins**: Based on LDAP and X.500 concepts; first introduced in the mid-'90s.
+- **Windows Server Integration**: Became part of Windows Server with the release of Windows Server 2000.
+- **Key Releases**:
+  - **Windows Server 2003**: Introduced Forest feature for managing multiple domains.
+  - **Windows Server 2008**: Added Active Directory Federation Services (ADFS) for Single Sign-On (SSO).
+  - **Windows Server 2016**: Enhanced security features, cloud migration capabilities, and Group Managed Service Accounts (gMSA).
+
+#### Ongoing Challenges
+- **Misconfigurations**: Common from 2000 to present; new vulnerabilities are regularly discovered.
+- **Patching and Security**: Organizations must stay updated on patches and fixes to protect AD environments.
+
+#### Importance for Security Professionals
+- **Penetration Testing**: Understanding AD is essential for identifying vulnerabilities and providing remediation advice.
+- **Knowledge Application**: A solid foundation in AD fundamentals aids in navigating environments of varying sizes and complexities.
+
+#### Conclusion
+- **Active Directory's Role**: Remains a critical component in enterprise environments, even as organizations transition to cloud and hybrid models.
+- **Career Relevance**: Knowledge of AD is vital for both attackers and defenders in the cybersecurity field. 
+
+### Key Takeaways
+- Active Directory is a crucial directory service with significant security implications.
+- Understanding its structure, vulnerabilities, and management is essential for effective security practices.
+- Continuous learning and adaptation are necessary to keep up with evolving threats and vulnerabilities in AD environments.

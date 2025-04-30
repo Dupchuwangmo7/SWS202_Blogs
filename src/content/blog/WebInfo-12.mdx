@@ -1,0 +1,68 @@
+---
+title: "Web Informarion- Crawling"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+### **Crawling (Spidering)**  
+Crawling is the automated, systematic process of browsing the web to collect data by following links from one page to another.
+
+---
+
+### **How Crawlers Work**
+- **Start Point**: Begins with a **seed URL** (starting webpage).
+- **Process**:
+  1. Fetch the page.
+  2. Parse and extract links.
+  3. Add extracted links to a queue.
+  4. Repeat the process on new links.
+
+---
+
+### **Example**
+- Homepage → Contains `link1`, `link2`, `link3`
+- Visiting `link1` → Reveals `Homepage`, `link2`, `link4`, `link5`
+- The crawler continues to discover new pages recursively.
+
+---
+
+### **Crawling Strategies**
+1. **Breadth-First Crawling**
+   - Explores all links at the current level before going deeper.
+   - Good for: Website structure overview.
+
+2. **Depth-First Crawling**
+   - Follows one path down as far as possible before backtracking.
+   - Good for: Deeply nested content discovery.
+
+---
+
+### **Data Extracted by Crawlers**
+- **Internal & External Links**: Map structure, discover hidden pages, relationships.
+- **Comments**: May contain sensitive or insider info (e.g., software versions, bugs).
+- **Metadata**: Includes titles, descriptions, keywords, author info—useful for context.
+- **Sensitive Files**:
+  - Backup: `.bak`, `.old`
+  - Config: `web.config`, `settings.php`
+  - Logs: `error_log`, `access_log`
+  - Credentials or secrets may be exposed.
+
+---
+
+### **Importance of Context in Crawling**
+- Data must be **analyzed holistically**.
+- Seemingly unimportant details (like a comment) can become valuable when correlated.
+- Example:
+  - Directory `/files/` discovered.
+  - Crawling shows directory browsing is enabled.
+  - Files like backups or documents are accessible.
+  - Comments may reference services or files, confirming the exposure.
+
+---
+
+### **Use in Reconnaissance**
+- Crawling helps **enumerate targets**, uncover **hidden resources**, and identify **weaknesses**.
+- When paired with other techniques (e.g., fingerprinting), it enhances **situational awareness** of the target.
+

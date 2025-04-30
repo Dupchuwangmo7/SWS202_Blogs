@@ -1,0 +1,76 @@
+---
+title: "Web Informarion- DNS Zone Transfers"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+
+## **DNS Zone Transfers – Notes**
+
+###  What is a Zone Transfer?
+- A **DNS Zone Transfer** is a method used to **replicate DNS records** from a primary DNS server to a secondary DNS server.
+- It ensures **consistency** and **redundancy** of DNS data across multiple servers.
+- **AXFR (Full Zone Transfer)** is the most common type used.
+
+---
+
+### **Zone Transfer Process**
+1. **AXFR Request**  
+   The secondary server sends a request to the primary server to initiate a zone transfer.
+
+2. **SOA Record Sent**  
+   The primary server responds with the **Start of Authority (SOA)** record to validate and compare version numbers.
+
+3. **DNS Records Transfer**  
+   All zone records (e.g., A, AAAA, MX, CNAME, NS, TXT) are sent from the primary to the secondary server.
+
+4. **Transfer Complete Signal**  
+   A final message indicates the end of the transfer.
+
+5. **Acknowledgement (ACK)**  
+   The secondary server confirms successful receipt.
+
+---
+
+###  **Zone Transfer Vulnerability**
+- If misconfigured, **unauthorised clients** can request and receive full DNS zone data.
+- Originally, zone transfers were **open by default**, but this is now a **security risk**.
+
+####  What an Attacker Gains:
+- **Subdomains** – Including hidden/dev/test environments.
+- **IP addresses** – Targets for scanning or exploitation.
+- **MX and NS records** – Useful for email and infrastructure mapping.
+
+---
+
+### **Remediation**
+- **Restrict zone transfers** to only trusted secondary servers using ACLs.
+- Use **TSIG** (Transaction Signatures) to authenticate transfers.
+- Regularly audit DNS server configurations for misconfigurations.
+
+---
+
+###  **Testing for Zone Transfers**
+Use `dig` to attempt a zone transfer:
+
+```bash
+dig axfr @<dns-server> <domain>
+```
+
+**Example:**
+```bash
+dig axfr @nsztm1.digi.ninja zonetransfer.me
+```
+
+- If successful, you'll see a full list of DNS records.
+- `zonetransfer.me` is intentionally misconfigured for educational purposes.
+
+---
+
+###  **Key Terms**
+- **AXFR**: Full zone transfer
+- **SOA Record**: Start of Authority – metadata for the zone
+- **dig**: A command-line DNS lookup tool
+

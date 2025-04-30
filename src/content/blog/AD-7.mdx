@@ -1,0 +1,60 @@
+---
+title: "Active directory- NTLM Authentication"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### NTLM Authentication Overview
+- **NTLM Variants**: Includes LM, NTLM, NTLMv1, and NTLMv2.
+- **Kerberos**: Preferred authentication protocol due to its stronger security features.
+
+### Hash/Protocol Comparison
+| Hash/Protocol | Cryptographic Technique | Mutual Authentication | Message Type | Trusted Third Party |
+|---------------|-------------------------|-----------------------|--------------|---------------------|
+| NTLM          | Symmetric key cryptography | No                    | Random number | Domain Controller    |
+| NTLMv1       | Symmetric key cryptography | No                    | MD4 hash, random number | Domain Controller    |
+| NTLMv2       | Symmetric key cryptography | No                    | MD4 hash, random number | Domain Controller    |
+| Kerberos      | Symmetric & asymmetric cryptography | Yes                | Encrypted ticket using DES, MD5 | Domain Controller/KDC |
+
+### LM Hash
+- **Oldest Password Storage**: Introduced in 1987, limited to 14 characters, case insensitive.
+- **Security Weaknesses**: Easily cracked due to small keyspace and predictable structure.
+- **Disabled by Default**: Since Windows Vista/Server 2008, but still found in legacy systems.
+
+### NT Hash (NTLM)
+- **Modern Hashing**: Uses MD4 hash of the little-endian UTF-16 value of the password.
+- **Challenge-Response Protocol**: Involves three messages (NEGOTIATE, CHALLENGE, AUTHENTICATE).
+- **Vulnerabilities**: Susceptible to brute-force attacks and pass-the-hash attacks.
+
+### NTLM Hash Structure
+- Example: `Rachel:500:aad3c435b514a4eeaad3b935b51304fe:e46b9e548fa0d122de7f59fb6d48eaa2:::`
+  - **Rachel**: Username
+  - **500**: Relative Identifier (RID) for the administrator account
+  - **LM Hash**: `aad3c435b514a4eeaad3b935b51304fe` (not usable if LM is disabled)
+  - **NT Hash**: `e46b9e548fa0d122de7f59fb6d48eaa2` (can be cracked or used in pass-the-hash)
+
+### NTLMv1
+- **Challenge/Response Mechanism**: Uses both NT and LM hashes.
+- **Vulnerabilities**: Easier to crack offline; susceptible to NTLM relay attacks.
+- **Hash Example**: `u4-netntlm::kNS:338d08f8e26de93300000000000000000000000000000000:9526fb8c23a90751cdd619b6cea564742e1e4bf33`
+
+### NTLMv2
+- **Improved Security**: Introduced in Windows NT 4.0 SP4; hardened against spoofing attacks.
+- **Two Responses**: Uses HMAC-MD5 for challenge responses.
+- **Hash Example**: `admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c7830310000000000000b45c67103`
+
+### Domain Cached Credentials (MSCache2)
+- **Offline Authentication**: Allows access when the domain controller is unreachable.
+- **Stored Locally**: Last ten hashes for domain users saved in the registry.
+- **Hash Format**: `$DCC2$10240#username#hash`.
+- **Cracking Difficulty**: Slow to crack; requires targeted attacks or weak passwords.
+
+### Key Takeaways
+- **Understanding Hashes**: Important for assessing security in Active Directory environments.
+- **Attack Vectors**: Be aware of cracking, pass-the-hash, and relay attacks.
+- **Legacy Systems**: Older authentication methods may still be present in large environments.
+
+### Moving Forward
+- Next focus: Users and groups in Active Directory, their privileges, and their role in lateral movement and resource access.
+

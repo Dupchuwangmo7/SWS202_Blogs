@@ -1,0 +1,96 @@
+---
+title: "Active directory- Active Directory Structure"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Structure Notes
+
+#### Overview of Active Directory (AD)
+- **Definition**: A directory service for Windows networks, enabling centralized management of resources (users, computers, groups, etc.).
+- **Key Functions**: Provides authentication and authorization within a Windows domain environment.
+- **Active Directory Domain Services (AD DS)**: 
+  - Stores directory data (usernames, passwords).
+  - Manages access rights for authorized users.
+- **Security Concerns**: 
+  - Increasing attacks and vulnerabilities.
+  - Many features are not "secure by default."
+  - Misconfigurations can lead to unauthorized access.
+
+#### Importance of Understanding AD Structure
+- **Enumeration**: Basic user accounts can enumerate many objects within AD, including:
+  - Domain Computers
+  - Domain Users
+  - Domain Group Information
+  - Organizational Units (OUs)
+  - Default Domain Policy
+  - Password Policy
+  - Group Policy Objects (GPOs)
+  - Domain Trusts
+  - Access Control Lists (ACLs)
+
+#### Hierarchical Structure of Active Directory
+- **Forest**: The top-level security boundary containing one or more domains.
+- **Domain**: A structure within which objects (users, computers, groups) are accessible.
+- **Organizational Units (OUs)**: Containers within a domain that can hold objects and other OUs, allowing for the assignment of group policies.
+
+#### Example of AD Structure
+- **Root Domain**: `INLANEFREIGHT.LOCAL`
+  - **Subdomains**: 
+    - `ADMIN.INLANEFREIGHT.LOCAL`
+    - `CORP.INLANEFREIGHT.LOCAL`
+    - `DEV.INLANEFREIGHT.LOCAL`
+  - **Objects**: Users, groups, computers, etc.
+  
+  ```
+  INLANEFREIGHT.LOCAL/
+  ├── ADMIN.INLANEFREIGHT.LOCAL
+  │   ├── GPOs
+  │   └── OU
+  │       └── EMPLOYEES
+  │           ├── COMPUTERS
+  │           │   └── FILE01
+  │           ├── GROUPS
+  │           │   └── HQ Staff
+  │           └── USERS
+  │               └── barbara.jones
+  ├── CORP.INLANEFREIGHT.LOCAL
+  └── DEV.INLANEFREIGHT.LOCAL
+  ```
+
+#### Trust Relationships
+- **Trusts**: Allow users in one domain to access resources in another domain.
+- **Bidirectional Trust**: Both domains trust each other (e.g., `INLANEFREIGHT.LOCAL` ↔ `FREIGHTLOGISTICS.LOCAL`).
+- **Child Domains**: Trusts may not exist between child domains across different forests unless explicitly set up.
+
+#### Example of Trust Relationships
+- **Two Forests**: 
+  - `INLANEFREIGHT.LOCAL`
+  - `FREIGHTLOGISTICS.LOCAL`
+- **Trust Dynamics**: 
+  - Users in `INLANEFREIGHT.LOCAL` can access resources in `FREIGHTLOGISTICS.LOCAL` and vice versa.
+  - Child domains do not automatically trust each other across forests.
+
+### Key Takeaways
+- Understanding the structure of Active Directory is crucial for effective management and security.
+- Misconfigurations can lead to significant security vulnerabilities.
+- Trust relationships can introduce complexities and potential security issues if not managed properly.
+
+### Step-by-Step Solutions for Questions
+1. **What is Active Directory?**
+   - Active Directory is a directory service for Windows networks that provides centralized management of resources and authentication/authorization functions.
+
+2. **What are the key components of AD?**
+   - Key components include forests, domains, organizational units (OUs), users, groups, and group policy objects (GPOs).
+
+3. **How is AD structured?**
+   - AD is structured hierarchically with a forest at the top, containing one or more domains, which can have nested subdomains and OUs.
+
+4. **What are the security implications of AD?**
+   - AD is vulnerable to attacks, and misconfigurations can lead to unauthorized access. Understanding its structure helps in identifying and mitigating these risks.
+
+5. **What are trust relationships in AD?**
+   - Trust relationships allow users in one domain to access resources in another domain. They can be bidirectional or unidirectional and need to be explicitly set up between child domains across different forests.
+
+By understanding these concepts, you can better navigate and secure Active Directory environments.

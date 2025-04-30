@@ -1,0 +1,60 @@
+---
+title: "Web Informarion- Creepy Crawlies"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+###  **Why Use Crawlers for Recon?**
+Web crawlers automate the discovery of:
+- **Hidden content** (like backup files or admin panels)
+- **Exposed sensitive data** (emails, internal files)
+- **Site structure and attack surface** (links, JS files, comments)
+
+---
+
+###  **Popular Crawling Tools Overview**
+
+| Tool | Highlights |
+|------|-----------|
+| **Burp Suite Spider** | Integrated into Burp Suite, great for dynamic application testing and mapping |
+| **OWASP ZAP Spider** | Open-source, similar to Burp, strong automation and scripting support |
+| **Scrapy** | Python framework; very customizable, ideal for structured data scraping |
+| **Apache Nutch** | Java-based, large-scale crawling (like mini search engines), but setup is complex |
+
+---
+
+###  **Scrapy + ReconSpider in Action**
+You’re using **ReconSpider**, a custom Scrapy spider, tailored for reconnaissance. The spider targets a domain (e.g., `inlanefreight.com`) and stores results in a JSON file like this:
+
+```json
+{
+  "emails": [...],
+  "links": [...],
+  "external_files": [...],
+  "js_files": [...],
+  "form_fields": [...],
+  "images": [...],
+  "videos": [],
+  "audio": [],
+  "comments": [...]
+}
+```
+
+This structure allows:
+- Identification of **email targets** (for phishing/social engineering simulations)
+- Mapping of **internal/external links**
+- Analysis of **form fields** (potential input vectors)
+- Discovery of **JavaScript** that could reveal API endpoints or business logic
+- Extraction of **comments** in HTML, sometimes exposing hints or debugging notes
+
+---
+
+###  **Ethical Crawling Reminder**
+Before using tools like ReconSpider:
+- Always have **permission**.
+- Respect `robots.txt`.
+- Throttle requests to avoid server overload.
+- Log your actions for transparency and legality.
+

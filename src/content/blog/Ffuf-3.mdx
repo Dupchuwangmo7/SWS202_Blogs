@@ -1,0 +1,85 @@
+---
+title: "Ffuf- Directory Fuzzing "
+publishedAt: 2025-04-29
+summary: ""
+tags: "Ffuf"
+---
+
+### Directory Fuzzing with Ffuf
+
+#### Introduction to Directory Fuzzing
+Directory fuzzing is a technique used to discover hidden directories and files on a web server by sending requests based on a predefined wordlist. This process helps identify resources that may not be directly linked or visible on the website.
+
+#### Using Ffuf for Directory Fuzzing
+**Ffuf** (Fuzz Faster U Fool) is a powerful tool pre-installed on your PwnBox instance, designed for web fuzzing. If you want to use it on your own machine, you can install it using:
+```bash
+apt install ffuf -y
+```
+Alternatively, you can download it from its [GitHub repository](https://github.com/ffuf/ffuf).
+
+#### Getting Started with Ffuf
+To familiarize yourself with the available options in ffuf, you can run:
+```bash
+ffuf -h
+```
+This command will display a comprehensive list of options, but for directory fuzzing, the most relevant options include:
+- **`-w`**: Specifies the wordlist file path.
+- **`-u`**: Specifies the target URL with a placeholder for fuzzing (e.g., `FUZZ`).
+
+#### Example Command Structure
+To set up a fuzzing command, you can assign a keyword (e.g., `FUZZ`) to your wordlist and specify the target URL. Here’s how you can do it:
+
+1. **Specify the Wordlist**:
+   ```bash
+   ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ
+   ```
+
+2. **Set the Target URL**:
+   ```bash
+   ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ
+   ```
+
+#### Running the Fuzzing Command
+Now, let’s run the fuzzing command on the target specified in your exercise:
+
+```bash
+ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ
+```
+
+#### Understanding the Output
+When you run the command, you will see output similar to the following:
+
+```
+/'___\ /'___\ /'___\
+/\ \__/ /\ \__/ __ __ /\ \__/
+\ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+\ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+\ \_\ \ \_\ \ \____/ \ \_\
+\/_/ \/_/ \/___/ \/_/
+v1.1.0-git
+________________________________________________
+:: Method : GET
+:: URL : http://SERVER_IP:PORT/FUZZ
+:: Wordlist : FUZZ: /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt
+:: Follow redirects : false
+:: Calibration : false
+:: Timeout : 10
+:: Threads : 40
+:: Matcher : Response status: 200,204,301,302,307,401,403
+________________________________________________
+blog [Status: 301, Size: 326, Words: 20, Lines: 10]
+:: Progress: [87651/87651] :: Job [1/1] :: 9739 req/sec :: Duration: [0:00:09] :: Errors: 0
+```
+
+- **Status Codes**: The output will show the status codes for each request. A **301** status indicates a redirect, while **200** indicates a successful response.
+- **Speed**: Ffuf can test tens of thousands of URLs in a matter of seconds, making it an efficient tool for directory fuzzing.
+
+#### Performance Considerations
+- **Thread Count**: You can increase the number of threads (e.g., `-t 200`) to speed up the process, but be cautious as this can lead to overwhelming the server or causing a Denial of Service (DoS).
+- **Response Analysis**: If you receive a response that is not a **404 Not Found** or **403 Access Denied**, it indicates that you have access to that directory, even if the page appears empty.
+
+#### Next Steps
+After identifying accessible directories, the next step is to explore these directories further to check for hidden files or pages. This can involve additional fuzzing for specific files or parameters within the identified directories.
+
+### Conclusion
+Directory fuzzing with ffuf is a powerful technique for uncovering hidden resources on web servers. By utilizing predefined wordlists and automating the request process, you can efficiently identify directories and files that may not be immediately visible, aiding in your web application security assessments.

@@ -1,0 +1,75 @@
+---
+title: "Web Informarion- robot.txt"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+### **robots.txt – The Website’s Crawler Rulebook**
+
+**Analogy**: Like a "Private – Do Not Enter" sign at a party, `robots.txt` tells web crawlers which parts of a site they can or cannot access.
+
+---
+
+### **What Is `robots.txt`?**
+- A **plain text file** located in a website's root directory:  
+  `https://example.com/robots.txt`
+- Based on the **Robots Exclusion Standard**
+- Contains **directives** for web crawlers on where they are allowed or disallowed to crawl
+
+---
+
+### **Structure of robots.txt**
+Each **record** includes:
+1. **User-agent**: Specifies which bots the rules apply to (e.g., `*`, `Googlebot`)
+2. **Directives**: Instructions for the specified user-agent
+
+#### Common Directives:
+| Directive      | Purpose                                                | Example                            |
+|----------------|--------------------------------------------------------|------------------------------------|
+| `Disallow`     | Blocks access to specified paths                       | `Disallow: /admin/`                |
+| `Allow`        | Grants access to specific paths                        | `Allow: /public/`                  |
+| `Crawl-delay`  | Sets delay between requests (in seconds)              | `Crawl-delay: 10`                  |
+| `Sitemap`      | Provides URL of the sitemap for efficient crawling     | `Sitemap: https://example.com/sitemap.xml` |
+
+---
+
+### **Sample robots.txt**
+```txt
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Allow: /public/
+
+User-agent: Googlebot
+Crawl-delay: 10
+Sitemap: https://www.example.com/sitemap.xml
+```
+
+**Interpretation**:
+- All bots: No access to `/admin/` and `/private/`, allowed to crawl `/public/`
+- Googlebot: Must wait 10 seconds between requests
+- Sitemap provided to help search engines crawl efficiently
+
+---
+
+### **Why Crawlers Respect robots.txt**
+- **Ethics & Legal**: Ignoring it could breach terms of service or legal boundaries.
+- **Performance**: Prevents overloading the web server.
+- **Security**: Helps protect sensitive or restricted parts of a website from indexing.
+
+---
+
+### **robots.txt in Web Reconnaissance**
+While **not meant for attackers**, this file can reveal valuable intelligence:
+- **Hidden Directories**: Disallowed paths may expose locations like `/backup/`, `/staging/`, or `/admin/`
+- **Website Structure Mapping**: Shows layout or components not visible in navigation
+- **Crawler Traps**: Honeypots designed to catch malicious bots—may indicate defensive security awareness
+
+---
+
+### **Important Notes**
+- `robots.txt` is **publicly accessible**.
+- It’s **not a security control**—**just a guideline**.
+- Malicious bots can **ignore** it entirely.
+

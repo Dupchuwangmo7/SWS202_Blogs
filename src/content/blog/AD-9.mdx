@@ -1,0 +1,72 @@
+---
+title: "Active directory- Active Directory Groups"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Groups Overview
+- **Purpose**: Groups are used to manage similar users collectively, allowing for mass assignment of rights and access to resources.
+- **Target for Attackers**: Groups can confer excessive privileges that may not be apparent, making them a key focus for penetration testers.
+
+### Importance of Group Management
+- **Audit Necessity**: Organizations should periodically audit groups to check for excessive memberships and privileges.
+- **Difference from OUs**: 
+  - **Organizational Units (OUs)**: Used for grouping users, groups, and computers for management and Group Policy deployment.
+  - **Groups**: Primarily for assigning permissions to access resources.
+
+### Types of Groups
+1. **Security Groups**: 
+   - Used to assign permissions and rights to resources.
+   - Members inherit permissions assigned to the group.
+
+2. **Distribution Groups**: 
+   - Used for email distribution (e.g., in Microsoft Exchange).
+   - Cannot be used to assign permissions to resources.
+
+### Group Scopes
+1. **Domain Local Group**:
+   - Used to manage permissions to resources in the domain where created.
+   - Can contain users from other domains but cannot be used in other domains.
+
+2. **Global Group**:
+   - Can grant access to resources in other domains.
+   - Can only contain accounts from the domain where created.
+
+3. **Universal Group**:
+   - Manages resources across multiple domains.
+   - Can contain users from any domain and is stored in the Global Catalog.
+   - Triggers forest-wide replication when members are added or removed.
+
+### Group Scope Examples
+- **Domain Local Groups**: Administrators, Users, Guests, etc.
+- **Global Groups**: Domain Computers, Domain Admins, Domain Users, etc.
+- **Universal Groups**: Schema Admins, Enterprise Admins.
+
+### Group Scope Conversion Rules
+- **Global to Universal**: Allowed if not part of another Global Group.
+- **Domain Local to Universal**: Allowed if not containing other Domain Local Groups.
+- **Universal to Domain Local**: Allowed without restrictions.
+- **Universal to Global**: Allowed if not containing other Universal Groups.
+
+### Built-in vs. Custom Groups
+- **Built-in Groups**: Created with a Domain Local Group scope for specific administrative purposes (e.g., Domain Admins).
+- **Custom Groups**: Organizations often create additional groups for specific needs, especially when adding services like Microsoft Exchange.
+
+### Nested Group Membership
+- **Definition**: Domain Local Groups can be members of other Domain Local Groups, allowing users to inherit privileges indirectly.
+- **Risk**: Can lead to unintended privileges; requires careful assessment to uncover.
+- **Tools**: BloodHound is useful for visualizing and analyzing nested group memberships and privileges.
+
+### Important Group Attributes
+- **cn**: Common Name of the group.
+- **member**: List of users, groups, and contacts that are members.
+- **groupType**: Specifies the group type and scope.
+- **memberOf**: Lists groups that contain this group (nested membership).
+- **objectSid**: Unique Security Identifier (SID) for the group.
+
+### Conclusion
+- **Fundamental Objects**: Groups are essential for managing rights and access in Active Directory.
+- **Knowledge Application**: Understanding group types, scopes, and nested memberships is crucial for effective administration and security assessments.
+- **Reconnaissance**: Knowledge of group structures aids in the reconnaissance phase of penetration testing, helping identify potential attack vectors.
+

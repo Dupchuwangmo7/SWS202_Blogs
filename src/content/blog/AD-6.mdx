@@ -1,0 +1,66 @@
+---
+title: "Active directory- Kerberos, DNS, LDAP, MSRPC"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Functionality: Kerberos, DNS, LDAP, MSRPC
+
+#### Kerberos
+- **Overview**: Kerberos is the default authentication protocol for domain accounts in Windows since Windows 2000. It is an open standard that allows interoperability with other systems.
+- **Authentication Process**:
+  1. **User  Login**: When a user logs in, their password encrypts a timestamp sent to the Key Distribution Center (KDC) for verification.
+  2. **Ticket Granting Ticket (TGT)**: If the KDC can decrypt the request, it issues a TGT, encrypted with the secret key of the `krbtgt` account.
+  3. **Requesting Service Ticket**: The user presents the TGT to the Domain Controller to request a Ticket Granting Service (TGS) ticket for a specific service.
+  4. **Service Access**: The user presents the TGS to the service, which decrypts it with its password hash to grant access.
+
+- **Key Features**:
+  - Stateless authentication protocol based on tickets, not passwords.
+  - Ensures user credentials are not transmitted over the network.
+  - Uses port **88** (TCP/UDP) for communication.
+
+#### DNS
+- **Overview**: Active Directory Domain Services (AD DS) uses DNS for locating Domain Controllers and facilitating communication among them.
+- **Functionality**:
+  - Resolves hostnames to IP addresses.
+  - Maintains a database of services running on the network using Service Records (SRV).
+  - Supports dynamic DNS for automatic updates of IP addresses.
+
+- **DNS Queries**:
+  - **Forward DNS Lookup**: Resolves domain names to IP addresses.
+    - Example: `nslookup INLANEFREIGHT.LOCAL`
+  - **Reverse DNS Lookup**: Resolves IP addresses to domain names.
+    - Example: `nslookup 172.16.6.5`
+  - **Port Usage**: Uses port **53** (UDP for queries, TCP for larger messages).
+
+#### LDAP (Lightweight Directory Access Protocol)
+- **Overview**: LDAP is used for directory lookups and authentication against Active Directory. It is an open-source, cross-platform protocol.
+- **Functionality**:
+  - Facilitates sharing of user account and security information across the network.
+  - Active Directory uses LDAP for communication with directory services.
+  - Uses port **389** for standard LDAP and port **636** for LDAP over SSL (LDAPS).
+
+- **Authentication Methods**:
+  1. **Simple Authentication**: Username/password BIND requests to authenticate.
+  2. **SASL Authentication**: Uses the Simple Authentication and Security Layer (SASL) framework, allowing other authentication services (like Kerberos) to bind to the LDAP server.
+
+- **Security Considerations**: LDAP messages are sent in cleartext by default; it is recommended to use TLS encryption to protect sensitive information.
+
+#### MSRPC (Microsoft Remote Procedure Call)
+- **Overview**: MSRPC is Microsoft's implementation of Remote Procedure Call (RPC), used for interprocess communication in client-server applications.
+- **Key Interfaces**:
+  1. **lsarpc**: Manages local security policy and provides interactive authentication services.
+  2. **netlogon**: Authenticates users and services in the domain environment.
+  3. **samr**: Manages the domain account database, allowing for user and group management. Attackers can use this to gather information about the domain.
+  4. **drsuapi**: Implements the Directory Replication Service (DRS) Remote Protocol for replication tasks across Domain Controllers.
+
+- **Security Implications**: Attackers can exploit MSRPC interfaces to perform reconnaissance and potentially extract sensitive information, such as password hashes from the NTDS.dit file.
+
+### Summary
+- **Kerberos** provides secure authentication without transmitting passwords.
+- **DNS** facilitates the location of Domain Controllers and service resolution.
+- **LDAP** allows for directory lookups and authentication, with security considerations for data in transit.
+- **MSRPC** enables interprocess communication and can be exploited for reconnaissance and data extraction in Active Directory environments. 
+
+Understanding these protocols is crucial for both defending and attacking within an Active Directory context, as they form the backbone of authentication and communication in Windows environments.

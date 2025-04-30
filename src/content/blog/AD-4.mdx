@@ -1,0 +1,83 @@
+---
+title: "Active directory- Active Directory Objects"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Objects Notes
+
+#### Definition of Objects
+- **Object**: Any resource present within an Active Directory (AD) environment, including users, organizational units (OUs), printers, domain controllers, etc.
+
+#### Types of Active Directory Objects
+
+1. **Users**
+   - **Description**: Represents individuals within the organization.
+   - **Type**: Leaf object (cannot contain other objects).
+   - **Attributes**: Includes display name, last login time, email address, account description, and more. There can be over 800 possible attributes.
+   - **Security Principal**: Has a Security Identifier (SID) and a Global Unique Identifier (GUID).
+   - **Importance**: Targeted by attackers; access to even low-privileged users can lead to significant enumeration of the domain.
+
+2. **Contacts**
+   - **Description**: Represents external users (e.g., vendors, customers).
+   - **Type**: Leaf object (cannot contain other objects).
+   - **Attributes**: Includes first name, last name, email address, telephone number, etc.
+   - **Security Principal**: Not a security principal (no SID, only a GUID).
+
+3. **Printers**
+   - **Description**: Represents printers accessible within the AD network.
+   - **Type**: Leaf object (cannot contain other objects).
+   - **Attributes**: Includes printer name, driver information, port number, etc.
+   - **Security Principal**: Not a security principal (no SID, only a GUID).
+
+4. **Computers**
+   - **Description**: Represents any computer joined to the AD network (workstations or servers).
+   - **Type**: Leaf object (cannot contain other objects).
+   - **Attributes**: Similar to user objects, including SID and GUID.
+   - **Importance**: Targeted by attackers; administrative access can grant significant rights.
+
+5. **Shared Folders**
+   - **Description**: Points to a shared folder on a specific computer.
+   - **Type**: Leaf object (cannot contain other objects).
+   - **Attributes**: Includes name, location, and security access rights.
+   - **Security Principal**: Not a security principal (no SID, only a GUID).
+
+6. **Groups**
+   - **Description**: A container object that can hold other objects (users, computers, groups).
+   - **Type**: Security principal (has a SID and a GUID).
+   - **Attributes**: Includes name, description, membership, and nested groups.
+   - **Importance**: Used to manage permissions and access to resources. Nested groups can lead to unintended rights.
+
+7. **Organizational Units (OUs)**
+   - **Description**: A container for storing similar objects for administrative ease.
+   - **Type**: Container object (can hold other objects).
+   - **Attributes**: Includes name, members, and security settings.
+   - **Importance**: Useful for delegating administrative tasks and managing Group Policy settings.
+
+8. **Domain**
+   - **Description**: The structure of an AD network containing objects like users and computers.
+   - **Attributes**: Each domain has its own database and policies.
+   - **Importance**: Policies can be set to manage access and security within the domain.
+
+9. **Domain Controllers (DCs)**
+   - **Description**: The servers that handle authentication requests and control access to resources.
+   - **Importance**: Validate access requests and enforce security policies.
+
+10. **Sites**
+    - **Description**: A set of computers across one or more subnets connected by high-speed links.
+    - **Importance**: Used to optimize replication across domain controllers.
+
+11. **Built-in**
+    - **Description**: A container that holds default groups in an AD domain.
+    - **Importance**: Predefined when an AD domain is created.
+
+12. **Foreign Security Principals (FSPs)**
+    - **Description**: Objects created to represent security principals from a trusted external forest.
+    - **Attributes**: Holds the SID of the foreign object.
+    - **Importance**: Facilitates access to resources across trusted domains.
+
+### Key Takeaways
+- Active Directory objects are essential components that facilitate resource management and security within an organization.
+- Understanding the different types of objects and their attributes is crucial for effective administration and security practices.
+- Users, computers, and groups are particularly important for managing access and permissions, making them prime targets for attackers.

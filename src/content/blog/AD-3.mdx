@@ -1,0 +1,100 @@
+---
+title: "Active directory- Active Directory Terminology"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Terminology Notes
+
+#### Key Terms and Definitions
+
+1. **Object**: 
+   - Any resource in Active Directory (AD), such as users, computers, printers, domain controllers, and organizational units (OUs).
+
+2. **Attributes**: 
+   - Characteristics associated with an object. For example, a computer object has attributes like hostname and DNS name. Each attribute has an LDAP name (e.g., `displayName` for Full Name).
+
+3. **Schema**: 
+   - The blueprint of the AD environment, defining object types and their attributes. It includes classes (e.g., "user," "computer") and their required/optional attributes.
+
+4. **Domain**: 
+   - A logical grouping of objects (computers, users, OUs, groups). Domains can operate independently or be connected via trust relationships.
+
+5. **Forest**: 
+   - A collection of AD domains, serving as the topmost container. It can contain multiple domains and operates independently, with possible trust relationships with other forests.
+
+6. **Tree**: 
+   - A collection of AD domains starting from a root domain. Each domain in a tree shares a boundary with others, forming parent-child trust relationships.
+
+7. **Container**: 
+   - Objects that hold other objects and have a defined place in the directory hierarchy.
+
+8. **Leaf**: 
+   - Objects that do not contain other objects and are found at the end of the hierarchy.
+
+9. **Global Unique Identifier (GUID)**: 
+   - A unique 128-bit value assigned to every AD object, ensuring uniqueness across the enterprise. Stored in the `ObjectGUID` attribute.
+
+10. **Security Principals**: 
+    - Entities that the operating system can authenticate, including users, computer accounts, and processes running in user or computer contexts.
+
+11. **Security Identifier (SID)**: 
+    - A unique identifier for a security principal or group, issued by the domain controller. Each SID is unique and cannot be reused.
+
+12. **Distinguished Name (DN)**: 
+    - The full path to an object in AD (e.g., `cn=bjones, ou=IT, ou=Employees, dc=inlanefreight, dc=local`).
+
+13. **Relative Distinguished Name (RDN)**: 
+    - A single component of the DN that uniquely identifies an object at its current level (e.g., `bjones`).
+
+14. **sAMAccountName**: 
+    - The user's logon name, which must be unique and 20 characters or fewer.
+
+15. **userPrincipalName**: 
+    - Another way to identify users in AD, formatted as `username@domain`.
+
+16. **FSMO Roles**: 
+    - Flexible Single Master Operation roles that manage specific tasks in AD to prevent conflicts. There are five roles: Schema Master, Domain Naming Master, RID Master, PDC Emulator, and Infrastructure Master.
+
+17. **Global Catalog (GC)**: 
+    - A domain controller that stores copies of all objects in an AD forest, allowing for object searches across domains.
+
+18. **Read-Only Domain Controller (RODC)**: 
+    - A DC with a read-only AD database, reducing replication traffic and preventing unauthorized changes.
+
+19. **Replication**: 
+    - The process of updating and transferring AD objects between domain controllers to ensure synchronization.
+
+20. **Service Principal Name (SPN)**: 
+    - Uniquely identifies a service instance for Kerberos authentication.
+
+21. **Group Policy Object (GPO)**: 
+    - A collection of policy settings applied to user and computer objects, identified by a unique GUID.
+
+22. **Access Control List (ACL)**: 
+    - An ordered collection of Access Control Entries (ACEs) that define permissions for an object.
+
+23. **Access Control Entries (ACEs)**: 
+    - Individual entries in an ACL that specify access rights for a trustee (user or group).
+
+24. **Discretionary Access Control List (DACL)**: 
+    - Defines which security principals are granted or denied access to an object.
+
+25. **System Access Control Lists (SACL)**: 
+    - Logs access attempts to secured objects.
+
+26. **Fully Qualified Domain Name (FQDN)**: 
+    - The complete name for a specific computer or host, used to locate objects in AD (e.g., `DC01.INLANEFREIGHT.LOCAL`).
+
+27. **Tombstone**: 
+    - A container for deleted AD objects, retained for a specified period (Tombstone Lifetime) before permanent deletion.
+
+28. **AD Recycle Bin**: 
+    - Introduced in Windows Server 2008 R2, it allows for the recovery of deleted AD objects without restoring from backups.
+
+29. **SYSVOL**: 
+    - A shared folder that stores public files in the domain, such as Group Policy settings and scripts.
+
+30. **AdminSDHolder**: 
+    -

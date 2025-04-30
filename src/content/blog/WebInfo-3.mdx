@@ -1,0 +1,71 @@
+---
+title: "Web Information- Utilizing WHOIS "
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+# Utilizing WHOIS 
+## Practical Scenarios
+
+### Scenario 1: Phishing Investigation
+- **Context**: Suspicious email claiming to be from company's bank
+- **WHOIS findings**:
+  - Recent domain registration (days old)
+  - Hidden registrant information (privacy service)
+  - Name servers linked to bulletproof hosting
+- **Outcome**: Clear identification of phishing attempt, domain blocked
+
+### Scenario 2: Malware Analysis
+- **Context**: Analyzing malware communicating with C2 server
+- **WHOIS findings**:
+  - Registration using anonymous free email service
+  - Registrant location in country known for cybercrime
+  - Registrar with history of lax abuse policies
+- **Outcome**: Identification of likely compromised/bulletproof server, hosting provider notified
+
+### Scenario 3: Threat Intelligence Report
+- **Context**: Tracking sophisticated threat actor targeting financial institutions
+- **WHOIS patterns discovered**:
+  - Cluster registration patterns before attacks
+  - Various aliases and fake identities
+  - Shared name servers across domains
+  - History of domain takedowns
+- **Outcome**: Created detailed threat actor profile with TTPs and IOCs
+
+## Using WHOIS Command
+
+### Installation
+```bash
+sudo apt update
+sudo apt install whois -y
+```
+
+### Basic Usage
+```bash
+whois facebook.com
+```
+
+### Sample Output Analysis for Facebook.com
+1. **Domain Registration**:
+   - Registrar: RegistrarSafe, LLC
+   - Creation Date: 1997-03-29
+   - Expiry Date: 2033-03-30
+   - Indicates legitimacy and established presence
+
+2. **Domain Owner**:
+   - Organization: Meta Platforms, Inc.
+   - Contact: Domain Admin
+
+3. **Domain Status**:
+   - Multiple protection flags (clientDeleteProhibited, etc.)
+   - Indicates strong security measures against unauthorized changes
+
+4. **Name Servers**:
+   - All within facebook.com domain (A.NS.FACEBOOK.COM, etc.)
+   - Suggests Meta manages its own DNS infrastructure
+
+## Important Considerations
+- WHOIS data alone may not identify specific vulnerabilities
+- Must be combined with other reconnaissance techniques
+- Useful for understanding organization's digital footprint at a high level

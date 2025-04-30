@@ -1,0 +1,53 @@
+---
+title: "Active directory- Security in Active Directory"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+
+### Overview of Group Policy
+- **Definition**: Group Policy is a Windows feature that allows administrators to manage user and computer settings in a domain environment.
+- **Purpose**: It is a powerful tool for configuring security settings, user settings, operating systems, and applications.
+- **Security Role**: Properly leveraging Group Policy is crucial for enhancing an organization's security posture.
+
+### Group Policy Objects (GPOs)
+- **Definition**: A GPO is a virtual collection of policy settings that can be applied to users or computers.
+- **Examples of GPO Capabilities**:
+  - Establishing different password policies for various account types.
+  - Preventing the use of removable media (e.g., USB devices).
+  - Enforcing screensaver passwords.
+  - Restricting access to certain applications (e.g., cmd.exe, PowerShell).
+  - Deploying software across the domain.
+  - Running scripts at startup/shutdown or user logon/logoff.
+
+### GPO Structure and Precedence
+- **Order of Precedence**:
+  1. **Local Group Policy**: Settings defined directly on the host.
+  2. **Site Policy**: Policies specific to the enterprise site.
+  3. **Domain-wide Policy**: Settings applied across the entire domain.
+  4. **Organizational Unit (OU)**: Specific settings for users and computers in designated OUs.
+  5. **Nested OU Policies**: Special permissions for objects within nested OUs.
+
+- **Processing Order**: GPOs are processed from the top down, with settings in lower-level OUs taking precedence over those in higher-level OUs.
+
+### Managing Group Policy
+- **Group Policy Management Console (GPMC)**: Tool for managing GPOs in a domain environment.
+- **Default Domain Policy**: Automatically created GPO that applies domain-wide settings.
+- **Default Domain Controllers Policy**: Sets baseline security and auditing settings for domain controllers.
+
+### GPO Processing and Refresh Frequency
+- **Refresh Interval**: GPO settings are updated every 90 minutes for users and computers, with a 5-minute interval for domain controllers.
+- **Manual Update**: Use the command `gpupdate /force` to immediately refresh GPO settings.
+
+### Security Considerations of GPOs
+- **Potential for Abuse**: Attackers can exploit GPOs to:
+  - Add rights to user accounts.
+  - Create local administrator accounts on hosts.
+  - Schedule malicious tasks or install malware.
+- **Example Attack Path**: Using tools like BloodHound to identify GPOs that can be modified by low-privileged users, potentially leading to privilege escalation.
+
+### Conclusion
+- **Importance of Understanding GPOs**: Knowledge of Group Policy is essential for both securing Active Directory and identifying potential attack vectors.
+- **Next Steps**: Practical exploration of Active Directory objects, Group Policy, and security configurations.
+

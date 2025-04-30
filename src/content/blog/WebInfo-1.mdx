@@ -1,0 +1,70 @@
+---
+title: "Web Informarion- Introduction "
+publishedAt: 2025-04-29
+summary: ""
+tags: "Web Information"
+---
+
+
+
+# Web Reconnaissance - Notes
+
+## Introduction
+- **Definition**: Systematic collection of information about target websites/applications
+- **Purpose**: Serves as preparatory phase before deeper analysis/exploitation
+- **Context**: Forms critical part of "Information Gathering" in penetration testing
+
+## Primary Goals
+1. **Identifying Assets**:
+   - Discover all publicly accessible components
+   - Map web pages, subdomains, IP addresses, technologies
+
+2. **Discovering Hidden Information**:
+   - Locate exposed sensitive content
+   - Find backup files, configuration files, internal documentation
+
+3. **Analyzing Attack Surface**:
+   - Identify potential vulnerabilities and weaknesses
+   - Assess technologies, configurations, entry points
+
+4. **Gathering Intelligence**:
+   - Collect information for exploitation or social engineering
+   - Identify personnel, email addresses, behavior patterns
+
+## Types of Reconnaissance
+
+### Active Reconnaissance
+- **Definition**: Direct interaction with target system to gather information
+
+| Technique | Description | Example Tools | Risk of Detection |
+|-----------|-------------|--------------|-------------------|
+| Port Scanning | Identify open ports/services | Nmap, Masscan, Unicornscan | High |
+| Vulnerability Scanning | Probe for known vulnerabilities | Nessus, OpenVAS, Nikto | High |
+| Network Mapping | Map target's network topology | Traceroute, Nmap | Medium-High |
+| Banner Grabbing | Get information from service banners | Netcat, curl | Low |
+| OS Fingerprinting | Identify operating system | Nmap, Xprobe2 | Low |
+| Service Enumeration | Determine service versions | Nmap | Low |
+| Web Spidering | Crawl website structure | Burp Suite Spider, OWASP ZAP Spider | Low-Medium |
+
+- **Advantage**: More comprehensive view of target
+- **Disadvantage**: Higher risk of detection
+
+### Passive Reconnaissance
+- **Definition**: Gathering information without direct interaction
+
+| Technique | Description | Example Tools | Risk of Detection |
+|-----------|-------------|--------------|-------------------|
+| Search Engine Queries | Use search engines to find information | Google, DuckDuckGo, Bing, Shodan | Very Low |
+| WHOIS Lookups | Query domain registration details | whois command-line tool, online services | Very Low |
+| DNS Analysis | Examine DNS records | dig, nslookup, host, dnsenum | Very Low |
+| Web Archive Analysis | Review historical website snapshots | Wayback Machine | Very Low |
+| Social Media Analysis | Gather info from social platforms | LinkedIn, Twitter, Facebook | Very Low |
+| Code Repositories | Analyze public code repos | GitHub, GitLab | Very Low |
+
+- **Advantage**: Stealthier approach, unlikely to trigger alerts
+- **Disadvantage**: May yield less comprehensive information
+
+## Module Focus
+- Will explore essential tools and techniques for web reconnaissance
+- Starting with WHOIS protocol for domain registration information
+- Builds foundation for more advanced reconnaissance methods

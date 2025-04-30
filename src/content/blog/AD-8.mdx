@@ -1,0 +1,74 @@
+---
+title: "Active directory- User and Machine Accounts"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+
+### User and Machine Accounts Overview
+- **Purpose**: User accounts allow individuals or programs to log on to computers and access resources based on assigned rights.
+- **Access Token**: Upon login, the system verifies the password and creates an access token that includes the user's security identity and group membership.
+
+### User Accounts
+- **Types**: User accounts can be local (not joined to AD) or domain-based (in Active Directory).
+- **Group Membership**: Users can be assigned to groups, simplifying privilege management.
+- **Provisioning**: Organizations typically provision one AD user account per employee, with additional accounts for specific roles (e.g., IT admin, service accounts).
+- **Disabled Accounts**: Organizations may retain accounts of former employees for audit purposes, often found in OUs like "FORMER EMPLOYEES."
+
+### User Rights and Privileges
+- **Range of Rights**: Users can have varying rights, from read-only access to full control (Enterprise Admin).
+- **Attack Surface**: User accounts present a significant attack surface; misconfigurations can lead to unintended rights being granted.
+- **Human Factor**: Users are often the weakest link due to weak passwords, unauthorized software, and careless mistakes.
+
+### Local Accounts
+- **Definition**: Local accounts are stored on individual servers or workstations and can only manage access to that specific host.
+- **Default Local Accounts**:
+  - **Administrator**: Full control over the system; cannot be deleted but can be disabled.
+  - **Guest**: Disabled by default; allows temporary access with limited rights.
+  - **SYSTEM**: Highest permission level; used by the OS for internal functions.
+  - **Network Service**: Used for running Windows services with remote credentials.
+  - **Local Service**: Minimal privileges; presents anonymous credentials to the network.
+
+### Domain Users
+- **Definition**: Domain users have rights granted by the domain to access resources across the network.
+- **KRBTGT Account**: A built-in service account for the Key Distribution service; a common target for attackers due to its critical role in domain authentication.
+
+### User Naming Attributes
+- **User PrincipalName (UPN)**: Primary logon name, often in email format.
+- **ObjectGUID**: Unique identifier for the user.
+- **SAMAccountName**: Logon name for compatibility with older Windows versions.
+- **objectSID**: Security Identifier for the user.
+- **sIDHistory**: Contains previous SIDs for migration scenarios.
+
+### Common User Attributes Example
+- Example command: `Get-ADUser  -Identity htb-student`
+  - **DistinguishedName**: CN=htb student,CN=Users,DC=INLANEFREIGHT,DC=LOCAL
+  - **Enabled**: True
+  - **GivenName**: htb
+  - **Name**: htb student
+  - **ObjectGUID**: aa799587-c641-4c23-a2f7-75850b4dd7e3
+  - **SamAccountName**: htb-student
+  - **SID**: S-1-5-21-3842939050-3880317879-2865463114-1111
+  - **Surname**: student
+  - **User PrincipalName**: htb-student@INLANEFREIGHT.LOCAL
+
+### Domain-joined vs. Non-Domain-joined Machines
+- **Domain-joined**:
+  - Central management via Domain Controller (DC).
+  - Users can log in and access resources from any domain-joined host.
+  - Configurations are managed through Group Policy.
+  
+- **Non-domain joined**:
+  - Managed individually; no central policy enforcement.
+  - User accounts exist only on the local host.
+  - Suitable for home use or small business environments.
+
+### Machine Accounts
+- **Access Level**: Machine accounts (e.g., NT AUTHORITY\SYSTEM) have rights similar to standard domain user accounts.
+- **Exploitation Potential**: SYSTEM level access can be leveraged for domain enumeration and attacks without needing individual user credentials.
+
+### Conclusion
+- Understanding user and machine accounts is crucial for managing security in Active Directory environments.
+- Awareness of account types, privileges, and potential vulnerabilities is essential for effective penetration testing and security assessments.
+

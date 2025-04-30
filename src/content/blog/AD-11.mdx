@@ -1,0 +1,74 @@
+---
+title: "Active directory- Security in Active Directory"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+
+### Security in Active Directory Overview
+- **Central Management**: Active Directory (AD) is designed for central management and information sharing, which can lead to security vulnerabilities.
+- **CIA Triad**: The balance between Confidentiality, Integrity, and Availability is crucial; AD tends to prioritize Availability and Confidentiality.
+
+### General Active Directory Hardening Measures
+1. **Microsoft Local Administrator Password Solution (LAPS)**:
+   - Randomizes and rotates local administrator passwords on Windows hosts.
+   - Reduces the impact of a compromised host.
+
+2. **Audit Policy Settings (Logging and Monitoring)**:
+   - Essential for detecting unauthorized changes or activities.
+   - Helps identify attacks such as password spraying or Kerberos attacks.
+
+3. **Group Policy Security Settings**:
+   - **Account Policies**: Manage user account interactions (password policies, account lockout).
+   - **Local Policies**: Apply security settings specific to computers (user rights assignments, security event audits).
+   - **Software Restriction Policies**: Control which software can run on hosts.
+   - **Application Control Policies**: Restrict application access for specific users/groups (e.g., using AppLocker).
+   - **Advanced Audit Policy Configuration**: Audit activities like file access, logon/logoff events, and privilege usage.
+
+4. **Update Management (SCCM/WSUS)**:
+   - Critical for timely patch deployment to minimize vulnerabilities.
+   - WSUS and SCCM help automate patch management.
+
+5. **Group Managed Service Accounts (gMSA)**:
+   - Provides higher security for service accounts with automatic password management.
+   - Allows credentials to be used across multiple hosts without user knowledge.
+
+6. **Security Groups**:
+   - Simplifies access management by assigning permissions to groups instead of individual users.
+   - Default security groups include Account Operators, Administrators, Domain Admins, etc.
+
+7. **Account Separation**:
+   - Administrators should use separate accounts for daily tasks and administrative tasks to limit exposure.
+   - Different passwords for each account mitigate risks from password reuse.
+
+8. **Password Complexity Policies + Passphrases + 2FA**:
+   - Use strong, complex passwords or passphrases.
+   - Implement multi-factor authentication (MFA) for critical access points.
+
+9. **Limiting Domain Admin Account Usage**:
+   - Domain Admin accounts should only be used on Domain Controllers to reduce attack vectors.
+
+10. **Periodic Auditing and Removing Stale Users and Objects**:
+    - Regularly audit AD to disable or remove unused accounts, especially those with elevated privileges.
+
+11. **Auditing Permissions and Access**:
+    - Conduct access control audits to ensure users have appropriate access levels.
+    - Limit the number of Domain Admins and review local admin rights.
+
+12. **Audit Policies & Logging**:
+    - Implement robust logging to detect anomalous activities and potential attacks.
+
+13. **Using Restricted Groups**:
+    - Control group membership via Group Policy to limit access to sensitive groups.
+
+14. **Limiting Server Roles**:
+    - Avoid installing unnecessary roles on sensitive hosts (e.g., IIS on Domain Controllers) to reduce the attack surface.
+
+15. **Limiting Local Admin and RDP Rights**:
+    - Control local admin rights and RDP access to minimize the risk of privilege escalation and data exposure.
+
+### Conclusion
+- **Defense-in-Depth**: A comprehensive security strategy is essential for protecting Active Directory.
+- **Regular Reviews**: Continuous monitoring, auditing, and updating security measures are critical to maintaining a secure AD environment.
+

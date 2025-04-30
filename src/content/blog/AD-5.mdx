@@ -1,0 +1,86 @@
+---
+title: "Active directory- Active Directory Functionality"
+publishedAt: 2025-04-29
+summary: ""
+tags: "Active Directory"
+---
+
+### Active Directory Functionality Notes
+
+#### Flexible Single Master Operation (FSMO) Roles
+FSMO roles are critical for the proper functioning of Active Directory. There are five FSMO roles, each with specific responsibilities:
+
+1. **Schema Master**
+   - **Description**: Manages the read/write copy of the AD schema, defining all attributes applicable to objects in AD.
+
+2. **Domain Naming Master**
+   - **Description**: Manages domain names and ensures that no two domains of the same name are created within the same forest.
+
+3. **Relative ID (RID) Master**
+   - **Description**: Assigns blocks of RIDs to other Domain Controllers (DCs) within the domain for new objects, ensuring unique SIDs for each object.
+
+4. **PDC Emulator**
+   - **Description**: Acts as the authoritative DC for authentication requests, password changes, and Group Policy Object (GPO) management. It also maintains time synchronization within the domain.
+
+5. **Infrastructure Master**
+   - **Description**: Translates GUIDs, SIDs, and Distinguished Names (DNs) between domains, facilitating communication in multi-domain environments. If malfunctioning, ACLs may show SIDs instead of resolved names.
+
+**Importance**: Issues with FSMO roles can lead to authentication and authorization problems within a domain.
+
+---
+
+#### Domain and Forest Functional Levels
+Functional levels determine the features and capabilities available in Active Directory Domain Services (AD DS) at both the domain and forest levels. They also specify which Windows Server operating systems can run a Domain Controller in a domain or forest.
+
+**Domain Functional Levels Overview**:
+
+| Domain Functional Level | Features Available | Supported Domain Controller Operating Systems |
+|-------------------------|--------------------|-----------------------------------------------|
+| Windows 2000 native     | Universal groups, group nesting, SID history | Windows Server 2008 R2, 2008, 2003, 2000 |
+| Windows Server 2003     | Netdom.exe, lastLogonTimestamp, constrained delegation | Windows Server 2012 R2, 2012, 2008 R2, 2008, 2003 |
+| Windows Server 2008     | DFS replication support, AES support for Kerberos | Windows Server 2012 R2, 2012, 2008 R2, 2008 |
+| Windows Server 2008 R2  | Authentication mechanism assurance, Managed Service Accounts | Windows Server 2012 R2, 2012, 2008 R2 |
+| Windows Server 2012     | KDC support for claims, compound authentication | Windows Server 2012 R2, 2012 |
+| Windows Server 2012 R2  | Extra protections for Protected Users group, Authentication Policies | Windows Server 2012 R2 |
+| Windows Server 2016     | Smart card required for interactive logon, new Kerberos features | Windows Server 2019, 2016 |
+
+**Forest Functional Levels Overview**:
+
+| Version                  | Capabilities |
+|--------------------------|--------------|
+| Windows Server 2003      | Forest trust, domain renaming, RODC |
+| Windows Server 2008      | Default domain functional level for new domains |
+| Windows Server 2008 R2   | Active Directory Recycle Bin for restoring deleted objects |
+| Windows Server 2012      | Default domain functional level for new domains |
+| Windows Server 2012 R2   | Default domain functional level for new domains |
+| Windows Server 2016      | Privileged access management (PAM) using Microsoft Identity Manager (MIM) |
+
+---
+
+#### Trusts
+A trust establishes authentication links between forests or domains, allowing users to access resources in another domain.
+
+**Types of Trusts**:
+
+1. **Parent-Child Trust**
+   - **Description**: A two-way transitive trust between a parent domain and its child domain.
+
+2. **Cross-Link Trust**
+   - **Description**: A trust between child domains to speed up authentication.
+
+3. **External Trust**
+   - **Description**: A non-transitive trust between two separate domains in different forests, utilizing SID filtering.
+
+4. **Tree-Root Trust**
+   - **Description**: A two-way transitive trust between a forest root domain and a new tree root domain.
+
+5. **Forest Trust**
+   - **Description**: A transitive trust between two forest root domains.
+
+**Trust Characteristics**:
+- **Transitive Trust**: Trust extends to objects that the child domain trusts.
+- **Non-Transitive Trust**: Only the child domain itself is trusted.
+- **One-Way Trust**: Only users in the trusted domain can access resources in the trusting domain.
+- **Two-Way Trust**: Users from both domains can access resources in each other's domains.
+
+**Security Implications**: Improperly set up trusts can create unintended attack paths. Mergers and acquisitions may introduce bidirectional trusts, increasing risk. Attackers can exploit these trusts to gain access to administrative
